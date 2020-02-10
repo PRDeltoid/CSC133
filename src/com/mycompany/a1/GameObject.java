@@ -1,6 +1,6 @@
 package com.mycompany.a1;
 
-import com.codename1.ui.geom.Point;
+import com.codename1.charts.models.Point;
 
 abstract public class GameObject {
 	Point location;
