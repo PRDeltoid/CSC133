@@ -16,5 +16,7 @@ abstract public class GameObject {
 	public void setColor(int newColor) {
 		this.color = newColor;
 	}
+	
+	abstract void printInfo();
 
 }

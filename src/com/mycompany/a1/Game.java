@@ -9,6 +9,10 @@ import java.lang.String;
 public class Game extends Form {
 	
 	private GameWorld world;
+	private int elapsedTicks;
+
+	//Flag for managing if the player has indicated they want to exit the game
+	private boolean wantsToExit = false;
 	
 	public Game() {
 		world = new GameWorld();
@@ -28,12 +32,95 @@ public class Game extends Form {
 				myTextField.clear();
 				if(sCommand.length() != 0)
 					switch (sCommand.charAt(0)) {
-						case 'x':
+						case 'a':
+							//Accelerate cyborg
 							break;
-							//add code to handle rest of the commands
+						case 'b':
+							//Brake Cyborg
+							break;
+						case 'l':
+							//Steer cyborg left 5 degrees
+							world.getPlayer().steerLeft();
+							break;
+						case 'r':
+							//Steer cyborg right 5 degrees
+							world.getPlayer().steerRight();
+							break;
+						case 'c':
+							//Pretend cyborg collided with another cyborg
+						case '1':
+						case '2':
+						case '3':
+						case '4':
+						case '5':
+						case '6':
+						case '7':
+						case '8':
+						case '9':
+							//Pretend Cyborg collided with base station "n"
+							break;
+						case 'e':
+							//Pretend Cyborg hit an energy station
+							break;
+						case 'g':
+							//Pretend Drone has collided with Cyborg
+							break;
+						case 't':
+							//Tick game clock
+							tick();
+							break;
+						case 'd':
+							//Describe current game/player cyborg values
+							printPlayerInfo();
+							break;
+						case 'm':
+							//Describe the map
+							world.printMapInfo();
+							break;
+						case 'x':
+							//Exit
+							System.out.println("Are you sure you want to quit? Y/n");
+							wantsToExit = true;
+							break;
+						case 'y':
+						case 'Y':
+							//User confirms exit
+							if(wantsToExit == true) {
+								System.out.println("Quitting");
+								System.exit(0);
+							} else {
+								System.out.println("This entry is only valid when attempting to quit");
+							}
+							break;
+						case 'n':
+						case 'N':
+							//User changed their mind, don't exit
+							if(wantsToExit == true) {
+								System.out.println("Aborting quit");
+								wantsToExit = false;
+							} else {
+								System.out.println("This entry is only valid when attempting to quit");
+							}
+							break;
 					}
 				}
 			}
 		);
 	}
+	
+	private void tick() {
+		//TODO
+		this.elapsedTicks += 1;
+		this.world.getPlayer().updateHeading();
+		
+	}
+	
+	private void printPlayerInfo() {
+		System.out.println("Cyborg Lives: " + world.getPlayer().getLives());
+		System.out.println("Elapsed Time: " + this.elapsedTicks);
+		System.out.println("Highest Base: " + world.getPlayer().getLastBase());
+		System.out.println("Energy Level: " + world.getPlayer().getEnergyLevel());
+		System.out.println("Damage Level: " + world.getPlayer().getDamageLevel());
+	}
+	
 }
