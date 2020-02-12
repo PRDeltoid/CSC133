@@ -1,7 +1,5 @@
 package com.mycompany.a1;
 
-import com.codename1.charts.util.ColorUtil;
-
 public abstract class MovableGameObject extends GameObject {
 	
 	private int heading = 0;

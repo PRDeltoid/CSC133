@@ -15,7 +15,7 @@ abstract public class GameObject {
 	
 	public int getSize() {
 		return size;
-	};
+	}
 	
 	private void setSize(int size) {
 		this.size = size;
@@ -24,6 +24,7 @@ abstract public class GameObject {
 	public int getColor() {
 		return color;
 	}
+
 	public void setColor(int newColor) {
 		this.color = newColor;
 	}
@@ -33,6 +34,8 @@ abstract public class GameObject {
 		this.location.setY(y);
 	}
 	
+	//Print the info of the object
+	//This must be implemented in subclasses because each subclass has different stats to report
 	abstract void printInfo();
 
 }

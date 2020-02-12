@@ -15,9 +15,30 @@ public class Game extends Form {
 	//Flag for managing if the player has indicated they want to exit the game
 	private boolean wantsToExit = false;
 	
+	//Progress the game world 1 tick
+	private void tick() {
+		//TODO
+		this.elapsedTicks += 1;
+		this.world.getPlayer().updateHeading();
+		this.world.update();
+		
+	}
+	
+	//Debug command to read player's cyborg state
+	private void printPlayerInfo() {
+		System.out.println("Cyborg Lives: " + world.getPlayer().getLives());
+		System.out.println("Elapsed Time: " + this.elapsedTicks);
+		System.out.println("Highest Base: " + world.getPlayer().getLastBase());
+		System.out.println("Energy Level: " + world.getPlayer().getEnergyLevel());
+		System.out.println("Damage Level: " + world.getPlayer().getDamageLevel());
+	}
+
 	public Game() {
+		//Create the world
 		world = new GameWorld();
+		//Setup the world
 		world.init();
+		//Play the game
 		play();
 	}
 	
@@ -113,19 +134,5 @@ public class Game extends Form {
 		);
 	}
 	
-	private void tick() {
-		//TODO
-		this.elapsedTicks += 1;
-		this.world.getPlayer().updateHeading();
-		
-	}
-	
-	private void printPlayerInfo() {
-		System.out.println("Cyborg Lives: " + world.getPlayer().getLives());
-		System.out.println("Elapsed Time: " + this.elapsedTicks);
-		System.out.println("Highest Base: " + world.getPlayer().getLastBase());
-		System.out.println("Energy Level: " + world.getPlayer().getEnergyLevel());
-		System.out.println("Damage Level: " + world.getPlayer().getDamageLevel());
-	}
 	
 }

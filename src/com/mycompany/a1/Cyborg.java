@@ -27,17 +27,6 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		this.lastBaseReached = 0;
 	}
 
-	public void move() {
-		double oldX = this.location.getX();
-		double oldY = this.location.getY();
-		double heading = Math.toRadians(90 - (getHeading()));
-		double deltaX = Math.cos(heading)*getSpeed();
-		double deltaY = Math.sin(heading)*getSpeed();
-		this.location.setX((float) (oldX + deltaX));
-		this.location.setY((float) (oldY + deltaY));
-	}
-
-
 	public void steerRight() {
 		//Move steering wheel 5 degrees to the right, make sure we are within our range
 		this.steeringDirection = Math.max(-40, this.steeringDirection - 5);

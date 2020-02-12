@@ -31,4 +31,9 @@ public class GameWorld {
 	public Cyborg getPlayer() {
 		return this.player;
 	}
+	
+	//Update function is called whenever we want to update the map/game objects' state (ie. every game tick)
+	public void update() {
+		
+	}
 }
