@@ -7,6 +7,12 @@ public abstract class MovableGameObject extends GameObject {
 	private int heading = 0;
 	private int speed = 0;
 	
+	public MovableGameObject(float x, float y, int size, int color, int heading, int speed) {
+		super(x, y, size, color);
+		this.heading = heading;
+		this.speed = speed;
+	}
+
 	public void move() {
 		double oldX = this.location.getX();
 		double oldY = this.location.getY();
@@ -32,5 +38,4 @@ public abstract class MovableGameObject extends GameObject {
 	public void setHeading(int heading) {
 		this.heading = heading;
 	}
-	
 }

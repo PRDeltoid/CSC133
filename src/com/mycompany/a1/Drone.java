@@ -3,6 +3,10 @@ package com.mycompany.a1;
 import com.codename1.charts.util.ColorUtil;
 
 public class Drone extends MovableGameObject {
+	
+	public Drone(float x, float y, int size, int color, int heading, int speed) {
+		super(x,y,size,color,heading,speed);
+	}
 
 	public void setColor() {}
 

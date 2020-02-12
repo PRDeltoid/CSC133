@@ -1,9 +1,15 @@
 package com.mycompany.a1;
 
+import com.codename1.charts.models.Point;
 import com.codename1.charts.util.ColorUtil;
 
 public class Base extends FixedGameObject {
 	private int sequenceNumber;
+	
+	public Base(float x, float y, int size, int color, int sequenceNumber) {
+		super(x,y,size,color);
+		this.sequenceNumber = sequenceNumber;
+	}
 
 	public void setColor() { }
 	

@@ -3,6 +3,8 @@ package com.mycompany.a1;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.codename1.charts.util.ColorUtil;
+
 public class GameWorld {
 
 	private int height;
@@ -14,7 +16,7 @@ public class GameWorld {
 		//TODO
 		height = 100;
 		width = 100;
-		player = new Cyborg(100, 100, 100, 100); //TODO: Fix this
+		player = new Cyborg(0,0,40,0,0,ColorUtil.MAGENTA,50,100,5,3,10);
 		objects.add(player);
 	}
 	

@@ -6,6 +6,11 @@ public class EnergyStation extends FixedGameObject {
 	
 	int capacity;
 	
+	public EnergyStation(float x, float y, int size, int color, int capacity) {
+		super(x,y,size,color);
+		this.capacity = capacity;
+	}
+	
 	public void printInfo() {
 		System.out.print("EnergyStation: ");
 		System.out.print("loc=" + this.location.getX() + "," + this.location.getY());

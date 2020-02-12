@@ -5,6 +5,7 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.Form;
 import java.lang.String;
+import java.lang.Character;
 
 public class Game extends Form {
 	
@@ -58,6 +59,8 @@ public class Game extends Form {
 						case '8':
 						case '9':
 							//Pretend Cyborg collided with base station "n"
+							int value = sCommand.charAt(0) - '0'; //ascii hack to find the value of the character given
+							world.getPlayer().setLastBase(value);
 							break;
 						case 'e':
 							//Pretend Cyborg hit an energy station
