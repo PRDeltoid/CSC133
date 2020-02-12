@@ -35,9 +35,11 @@ public class Game extends Form {
 					switch (sCommand.charAt(0)) {
 						case 'a':
 							//Accelerate cyborg
+							world.getPlayer().accelerate();
 							break;
 						case 'b':
 							//Brake Cyborg
+							world.getPlayer().brake();
 							break;
 						case 'l':
 							//Steer cyborg left 5 degrees

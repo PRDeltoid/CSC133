@@ -39,15 +39,13 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 
 
 	public void steerRight() {
-		//Move heading 5 degrees to the right, make sure we are within our range
-		//TODO Make this between -40 and +40
-		this.steeringDirection = (this.steeringDirection - 5) % 360;
+		//Move steering wheel 5 degrees to the right, make sure we are within our range
+		this.steeringDirection = Math.max(-40, this.steeringDirection - 5);
 	}
 	
 	public void steerLeft() {
-		//Move heading 5 degrees to the left, make sure we are within our range
-		//TODO Make this between -40 and +40
-		this.steeringDirection = (this.steeringDirection + 5) % 360;
+		//Move steering wheel 5 degrees to the left, make sure we are within our range
+		this.steeringDirection = Math.min(40, this.steeringDirection + 5);
 	}
 	
 	//Updates the cyborg's heading based upon its current steering direction
@@ -104,11 +102,12 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	}
 	
 	public void brake() {
-		
+		this.setSpeed(Math.max(0,this.getSpeed()-5));
 	}
 	
 	public void accelerate() {
-		int newSpeed = Math.min(maximumSpeed, this.getSpeed()*(damageLevel/maxDamageLevel));
+		//TODO Double-check this
+		int newSpeed = Math.min(maximumSpeed, this.getSpeed()-(this.getSpeed())*(damageLevel/maxDamageLevel));
 		this.setSpeed(newSpeed);
 	}
 }
