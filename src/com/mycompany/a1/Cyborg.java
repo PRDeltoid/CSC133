@@ -11,20 +11,37 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	private int maxDamageLevel;
 	private int lastBaseReached;
 	private int steeringDirection;
+	private boolean isPlayer;
 	
 	private int lives;
 	
-	public Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int lives, int maxDamageLevel) {
+	public Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int lives, int maxDamageLevel, boolean isPlayer) {
 		super(x, y, size, color, heading, speed);
 		this.maximumSpeed = maxSpeed;
 		this.energyLevel = energyLevel;
 		this.energyConsumptionRate = energyConsumptionRate;
 		this.lives = lives;
 		this.maxDamageLevel = maxDamageLevel;
+		this.isPlayer = isPlayer;
 		
 		//Defaults
 		this.damageLevel = 0;
 		this.lastBaseReached = 0;
+	}
+	
+	public Cyborg() {
+		super(0, 0, 10, ColorUtil.BLUE, 0, 0);
+		this.maximumSpeed = 50;
+		this.energyLevel = 100;
+		this.energyConsumptionRate = 5;
+		this.lives = 3;
+		this.maxDamageLevel = 10;
+		this.isPlayer = false;
+		
+		//Defaults
+		this.damageLevel = 0;
+		this.lastBaseReached = 0;
+		
 	}
 
 	public void steerRight() {
@@ -39,7 +56,8 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	
 	//Updates the cyborg's heading based upon its current steering direction
 	public void updateHeading() {
-		setHeading(getHeading() + this.steeringDirection);
+		//Make sure we our heading always falls within 0-359
+		setHeading((getHeading() + this.steeringDirection) % 360);
 	}
 	
 	public int getLives() {
@@ -50,6 +68,10 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		this.lives = lives;
 	}
 	
+	public boolean isPlayer() {
+		return this.isPlayer;
+	}
+
 	//Returns the last base a cyborg reached. 
 	//This will be equal to the "highest base reached"
 	public int getLastBase() {
@@ -68,6 +90,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		return this.energyLevel;
 	}
 	
+	
 	public int getDamageLevel() {
 		return this.damageLevel;
 	}
@@ -78,7 +101,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	
 
 	public void printInfo() {
-		System.out.print("loc=" + this.location.getX() + "," + this.location.getY());
+		System.out.print("Cyborg: loc=" + this.location.getX() + "," + this.location.getY());
 		System.out.print(" color=[" + ColorUtil.red(this.color) + "," + ColorUtil.blue(this.color) + "," + ColorUtil.green(this.color) + "]");
 		System.out.print(" heading=" + this.getHeading());
 		System.out.print(" speed=" + this.getSpeed());
@@ -87,16 +110,44 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		System.out.print(" steeringDirection=" + this.steeringDirection);
 		System.out.print(" energyLevel=" + this.getEnergyLevel());
 		System.out.print(" damage=" + this.getDamageLevel());
+		System.out.print(" isPlayer=" + this.isPlayer());
 		System.out.print("\n");
 	}
 	
+	//Decrease the cyborg's speed by a fixed amount
 	public void brake() {
 		this.setSpeed(Math.max(0,this.getSpeed()-5));
 	}
 	
+	//Increase the cyborg's speed by a factor related to it's current damage level
+	//The higher the damage, the lower the additional speed
 	public void accelerate() {
 		//TODO Double-check this
 		int newSpeed = Math.min(maximumSpeed, this.getSpeed()-(this.getSpeed())*(damageLevel/maxDamageLevel));
 		this.setSpeed(newSpeed);
+	}
+	
+	//Determine what happens when the cyborg has collided with any given GameObject
+	public void collide(GameObject collider) {
+		if(collider instanceof Drone) {
+			
+		} else if(collider instanceof Cyborg) {
+			
+		} else if(collider instanceof Base) {
+			
+		} else if(collider instanceof EnergyStation) {
+			
+		} else {
+			//unknown collider, show an error
+			System.out.print("Error: An unknown collision has occurred!");
+		}
+		
+	}
+	
+	public void update() {
+		//per the documentation, the cyborg moves THEN updates heading THEN updates its energy level
+		move();
+		updateHeading();
+		updateEnergyLevel();
 	}
 }

@@ -4,11 +4,13 @@ import com.codename1.charts.util.ColorUtil;
 
 public class EnergyStation extends FixedGameObject {
 	
-	int capacity;
+	private int capacity;
+	final private double capcityMod = 0.4;
 	
-	public EnergyStation(float x, float y, int size, int color, int capacity) {
+	public EnergyStation(float x, float y, int size, int color) {
 		super(x,y,size,color);
-		this.capacity = capacity;
+		//capacity is determined by the size multiplied by a modifier (capcityMod)
+		this.capacity = (int) Math.floor(size*this.capcityMod);
 	}
 	
 	public void printInfo() {
@@ -19,4 +21,6 @@ public class EnergyStation extends FixedGameObject {
 		System.out.print(" capacity=" + this.capacity);
 		System.out.print("\n");
 	}
+	
+	public void update() {}
 }

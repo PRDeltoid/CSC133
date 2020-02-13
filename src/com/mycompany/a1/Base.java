@@ -22,4 +22,5 @@ public class Base extends FixedGameObject {
 		System.out.print("\n");
 	}
 
+	public void update() {}
 }

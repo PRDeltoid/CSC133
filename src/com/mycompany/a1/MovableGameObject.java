@@ -36,4 +36,6 @@ public abstract class MovableGameObject extends GameObject {
 	public void setHeading(int heading) {
 		this.heading = heading;
 	}
+	
+	abstract public void updateHeading();
 }

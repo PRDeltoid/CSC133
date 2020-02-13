@@ -2,6 +2,7 @@ package com.mycompany.a1;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import com.codename1.charts.util.ColorUtil;
 
@@ -12,16 +13,41 @@ public class GameWorld {
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	private Cyborg player;
 	
+	public GameWorld(int height, int width) {
+		this.height = height;
+		this.width = width;
+	}
+	
 	public void init() {
-		//TODO
-		height = 100;
-		width = 100;
-		player = new Cyborg(0,0,40,0,0,ColorUtil.MAGENTA,50,100,5,3,10);
+		//TODO Add more objects to the game world (bases, drones, energy stations)
+		//Initialize map variables
+		Random rand = new Random();
+
+		//Add our player
+		//Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int lives, int maxDamageLevel, boolean isPlayer) {
+		player = new Cyborg(0,0,40,ColorUtil.MAGENTA,0,10,50,100,5,3,10,true);
 		objects.add(player);
+
+		//Add our bases
+		//4 bases, random location, blue color, sequenced in order
+		objects.add(new Base(0,0,10,ColorUtil.BLUE,1));
+		objects.add(new Base(rand.nextFloat() % height, rand.nextFloat() % width,10,ColorUtil.BLUE,2));
+		objects.add(new Base(rand.nextFloat() % height, rand.nextFloat() % width,10,ColorUtil.BLUE,3));
+		objects.add(new Base(rand.nextFloat() % height, rand.nextFloat() % width,10,ColorUtil.BLUE,4));
+
+		//EnergyStation(float x, float y, int size, int color) {
+		//2 energy stations with random location and size (and thus, random capacity)
+		objects.add(new EnergyStation(rand.nextFloat() % height, rand.nextFloat() % width, rand.nextInt() % 50, ColorUtil.GREEN));
+		objects.add(new EnergyStation(rand.nextFloat() % height, rand.nextFloat() % width, rand.nextInt() % 50, ColorUtil.GREEN));
+		
+		//Drone(float x, float y, int size, int color, int heading, int speed) {
+		//2 drones with random location, fixed size, and random speed and heading
+		objects.add(new Drone(rand.nextFloat() % height, rand.nextFloat() % width, 10, ColorUtil.YELLOW, rand.nextInt() % 360, rand.nextInt() % 10));
+		objects.add(new Drone(rand.nextFloat() % height, rand.nextFloat() % width, 10, ColorUtil.YELLOW, rand.nextInt() % 360, rand.nextInt() % 10));
 	}
 	
 	public void printMapInfo() {
-		Iterator iter = objects.iterator();
+		Iterator<GameObject> iter = objects.iterator();
 		while(iter.hasNext()) {
 			GameObject object = (GameObject) iter.next();
 			object.printInfo();
@@ -34,6 +60,12 @@ public class GameWorld {
 	
 	//Update function is called whenever we want to update the map/game objects' state (ie. every game tick)
 	public void update() {
+		Iterator<GameObject> objects = this.objects.iterator();
 		
+		//Iterate through every game object and apply relevant updates to it
+		while(objects.hasNext()) {
+			GameObject object = objects.next();
+			object.update();
+		}
 	}
 }

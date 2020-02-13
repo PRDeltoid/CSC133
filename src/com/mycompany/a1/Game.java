@@ -17,11 +17,8 @@ public class Game extends Form {
 	
 	//Progress the game world 1 tick
 	private void tick() {
-		//TODO
 		this.elapsedTicks += 1;
-		this.world.getPlayer().updateHeading();
 		this.world.update();
-		
 	}
 	
 	//Debug command to read player's cyborg state
@@ -35,7 +32,7 @@ public class Game extends Form {
 
 	public Game() {
 		//Create the world
-		world = new GameWorld();
+		world = new GameWorld(100,100);
 		//Setup the world
 		world.init();
 		//Play the game
@@ -72,6 +69,8 @@ public class Game extends Form {
 							break;
 						case 'c':
 							//Pretend cyborg collided with another cyborg
+							//We create an imaginary cyborg as none exist in our game world (yet)
+							world.getPlayer().collide(new Cyborg());
 						case '1':
 						case '2':
 						case '3':
@@ -82,7 +81,7 @@ public class Game extends Form {
 						case '8':
 						case '9':
 							//Pretend Cyborg collided with base station "n"
-							int value = sCommand.charAt(0) - '0'; //ascii hack to find the value of the character given
+							int value = sCommand.charAt(0) - '0'; //ascii hack to find the integer value of the character given
 							world.getPlayer().setLastBase(value);
 							break;
 						case 'e':
