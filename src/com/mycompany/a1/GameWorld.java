@@ -92,7 +92,7 @@ public class GameWorld {
 		while(!(object instanceof EnergyStation)) {
 			object = objects.get(rand.nextInt() % objects.size());
 		}
-		//Return our random drone
+		//Return our random energyStation 
 		return (EnergyStation) object;
 		
 	}

@@ -119,16 +119,25 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	
 	//Decrease the cyborg's speed by a fixed amount
 	public void brake(int speedMod) {
-		this.setSpeed(Math.max(0,this.getSpeed()-speedMod));
+		int newSpeed = Math.max(0,this.getSpeed()-speedMod);
+		this.setSpeed(newSpeed);
 	}
 	
 	//Increase the cyborg's speed by a factor related to it's current damage level
 	//The higher the damage, the lower the additional speed
 	public void accelerate(int speedMod) {
+		//Increase speed by speedMod
+		int newSpeed = this.getSpeed()+speedMod;
+		this.setSpeed(newSpeed);
+		//Update speed to make sure we are within our adjusted max speed range (see updateSpeed method)
+		updateSpeed();
+	}
+	
+	private void updateSpeed() {
 		//Find our max speed based upon our damage
 		int adjustedMaxSpeed = maximumSpeed-(maximumSpeed*(damageLevel/maxDamageLevel));
-		//Compare our new accelerated speed to our adjusted max speed, take the lower of the two
-		int newSpeed = Math.min(adjustedMaxSpeed, this.getSpeed()+speedMod);
+		//Update our speed to be either our max adjusted speed, or our current speed (whichever is lower)
+		int newSpeed = Math.min(adjustedMaxSpeed, this.getSpeed());
 		this.setSpeed(newSpeed);
 	}
 	
@@ -138,9 +147,10 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		if(collider instanceof Drone) {
 			//Hardcoded 1 damage 
 			this.damageLevel += 1;
-			//TODO
+			this.fadeColor();
 		} else if(collider instanceof Cyborg) {
-			//TODO
+			this.damageLevel += 1;
+			this.fadeColor();
 		} else if(collider instanceof Base) {
 			//Update the cyborg's last touched base IF THEY ARE IN SEQUENCE (ie. 1 more than previously touched base)
 			setLastBase(((Base) collider).getSequenceNumber());
@@ -153,6 +163,9 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 			System.out.print("Error: An unknown collision has occurred!");
 		}
 		
+		//recalculate our speed after collision (if we took damage, our speed will decrease)
+		updateSpeed();
+		
 	}
 	
 	public void update() {
@@ -160,6 +173,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		move();
 		updateHeading();
 		updateEnergyLevel();
+		updateSpeed();
 	}
 	
 	//Checks for death and updates the cyborg if death occurs (they lose one life)
@@ -181,6 +195,10 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 
 	public void loseALife() {
 		this.lives -= 1;
+	}
+	
+	private void fadeColor() {
+		this.color =- ColorUtil.red(25);
 	}
 	
 }
