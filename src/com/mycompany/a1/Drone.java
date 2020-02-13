@@ -33,8 +33,8 @@ public class Drone extends MovableGameObject {
 	}
 
 	public void update() {
-		updateHeading();
 		move();
+		updateHeading();
 	}
 
 }

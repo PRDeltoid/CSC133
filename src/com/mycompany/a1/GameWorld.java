@@ -68,4 +68,30 @@ public class GameWorld {
 			object.update();
 		}
 	}
+	
+	//helper function to get a random drone from the gameobject list
+	public Drone debugGetRandomDrone() {
+		//Randomly pick objects until we pick a drone, basically
+		Random rand = new Random();
+		GameObject object = objects.get(rand.nextInt() % objects.size());
+		while(!(object instanceof Drone)) {
+			object = objects.get(rand.nextInt() % objects.size());
+		}
+		//Return our random drone
+		return (Drone) object;
+		
+	}
+	
+	public EnergyStation debugGetRandomEnergyStation() {
+		//Randomly pick objects until we pick a energyStation, basically
+		Random rand = new Random();
+		GameObject object = objects.get(rand.nextInt() % objects.size());
+		while(!(object instanceof EnergyStation)) {
+			object = objects.get(rand.nextInt() % objects.size());
+		}
+		//Return our random drone
+		return (EnergyStation) object;
+		
+		
+	}
 }

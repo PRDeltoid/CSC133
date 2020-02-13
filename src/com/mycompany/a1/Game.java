@@ -5,7 +5,6 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.Form;
 import java.lang.String;
-import java.lang.Character;
 
 public class Game extends Form {
 	
@@ -13,6 +12,7 @@ public class Game extends Form {
 	private int elapsedTicks;
 
 	//Flag for managing if the player has indicated they want to exit the game
+	//This makes the Y and N entries available for use
 	private boolean wantsToExit = false;
 	
 	//Progress the game world 1 tick
@@ -86,9 +86,11 @@ public class Game extends Form {
 							break;
 						case 'e':
 							//Pretend Cyborg hit an energy station
+							world.getPlayer().collide(world.debugGetRandomEnergyStation());
 							break;
 						case 'g':
-							//Pretend Drone has collided with Cyborg
+							//Pretend Cyborg has collided with drone
+							world.getPlayer().collide(world.debugGetRandomDrone());
 							break;
 						case 't':
 							//Tick game clock

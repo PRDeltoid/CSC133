@@ -1,6 +1,5 @@
 package com.mycompany.a1;
 
-import com.codename1.charts.models.Point;
 import com.codename1.charts.util.ColorUtil;
 
 public class Base extends FixedGameObject {

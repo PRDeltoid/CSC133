@@ -128,6 +128,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	}
 	
 	//Determine what happens when the cyborg has collided with any given GameObject
+	//This may need to be moved into GameObject so that everything calculates its own collision, but we'll place it all here for now
 	public void collide(GameObject collider) {
 		if(collider instanceof Drone) {
 			
