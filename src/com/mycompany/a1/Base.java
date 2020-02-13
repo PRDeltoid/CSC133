@@ -9,6 +9,10 @@ public class Base extends FixedGameObject {
 		super(x,y,size,color);
 		this.sequenceNumber = sequenceNumber;
 	}
+	
+	public int getSequenceNumber() {
+		return this.sequenceNumber;
+	}
 
 	public void setColor() { }
 	

@@ -17,8 +17,22 @@ public class Game extends Form {
 	
 	//Progress the game world 1 tick
 	private void tick() {
+		//Update the game world
 		this.elapsedTicks += 1;
 		this.world.update();
+
+		//check if the player has died/can't move
+		if(world.getPlayer().isDead() == true) {
+			//Lose a life
+			world.getPlayer().loseALife();
+			//Check for game over (no lives left)
+			if(world.getPlayer().isGameover()) {
+				System.out.println("Game Over! You have run out of lives");
+			} else {
+				System.out.println("The Cyborg has failed. You lose one life. Try again!");
+				this.world.init();
+			}
+		}
 	}
 	
 	//Debug command to read player's cyborg state
@@ -30,15 +44,6 @@ public class Game extends Form {
 		System.out.println("Damage Level: " + world.getPlayer().getDamageLevel());
 	}
 
-	public Game() {
-		//Create the world
-		world = new GameWorld(100,100);
-		//Setup the world
-		world.init();
-		//Play the game
-		play();
-	}
-	
 	private void play() {
 		Label myLabel=new Label("Enter a Command:");
 		this.addComponent(myLabel);
@@ -52,12 +57,12 @@ public class Game extends Form {
 				if(sCommand.length() != 0)
 					switch (sCommand.charAt(0)) {
 						case 'a':
-							//Accelerate cyborg
-							world.getPlayer().accelerate();
+							//Accelerate cyborg (5 speed units)
+							world.getPlayer().accelerate(5);
 							break;
 						case 'b':
-							//Brake Cyborg
-							world.getPlayer().brake();
+							//Brake Cyborg (5 speed units)
+							world.getPlayer().brake(5);
 							break;
 						case 'l':
 							//Steer cyborg left 5 degrees
@@ -133,6 +138,15 @@ public class Game extends Form {
 				}
 			}
 		);
+	}
+	
+	public Game() {
+		//Create the world
+		world = new GameWorld(100,100);
+		//Setup the world
+		world.init();
+		//Play the game
+		play();
 	}
 	
 	

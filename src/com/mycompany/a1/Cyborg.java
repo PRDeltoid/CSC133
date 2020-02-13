@@ -26,7 +26,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		
 		//Defaults
 		this.damageLevel = 0;
-		this.lastBaseReached = 0;
+		this.lastBaseReached = 1;
 	}
 	
 	public Cyborg() {
@@ -40,7 +40,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		
 		//Defaults
 		this.damageLevel = 0;
-		this.lastBaseReached = 0;
+		this.lastBaseReached = 1;
 		
 	}
 
@@ -90,6 +90,10 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		return this.energyLevel;
 	}
 	
+	private void addEnergy(int energy) {
+		this.energyLevel += energy;
+		
+	}
 	
 	public int getDamageLevel() {
 		return this.damageLevel;
@@ -98,7 +102,6 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	public void updateEnergyLevel() {
 		this.energyLevel -= this.energyConsumptionRate;
 	}
-	
 
 	public void printInfo() {
 		System.out.print("Cyborg: loc=" + this.location.getX() + "," + this.location.getY());
@@ -115,15 +118,17 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	}
 	
 	//Decrease the cyborg's speed by a fixed amount
-	public void brake() {
-		this.setSpeed(Math.max(0,this.getSpeed()-5));
+	public void brake(int speedMod) {
+		this.setSpeed(Math.max(0,this.getSpeed()-speedMod));
 	}
 	
 	//Increase the cyborg's speed by a factor related to it's current damage level
 	//The higher the damage, the lower the additional speed
-	public void accelerate() {
-		//TODO Double-check this
-		int newSpeed = Math.min(maximumSpeed, this.getSpeed()-(this.getSpeed())*(damageLevel/maxDamageLevel));
+	public void accelerate(int speedMod) {
+		//Find our max speed based upon our damage
+		int adjustedMaxSpeed = maximumSpeed-(maximumSpeed*(damageLevel/maxDamageLevel));
+		//Compare our new accelerated speed to our adjusted max speed, take the lower of the two
+		int newSpeed = Math.min(adjustedMaxSpeed, this.getSpeed()+speedMod);
 		this.setSpeed(newSpeed);
 	}
 	
@@ -131,13 +136,18 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	//This may need to be moved into GameObject so that everything calculates its own collision, but we'll place it all here for now
 	public void collide(GameObject collider) {
 		if(collider instanceof Drone) {
-			
+			//Hardcoded 1 damage 
+			this.damageLevel += 1;
+			//TODO
 		} else if(collider instanceof Cyborg) {
-			
+			//TODO
 		} else if(collider instanceof Base) {
-			
+			//Update the cyborg's last touched base IF THEY ARE IN SEQUENCE (ie. 1 more than previously touched base)
+			setLastBase(((Base) collider).getSequenceNumber());
 		} else if(collider instanceof EnergyStation) {
-			
+			//Give the cyborg all of the EnergyStation's energy
+			this.addEnergy(((EnergyStation) collider).getCapacity());
+			((EnergyStation) collider).emptyCapacity();
 		} else {
 			//unknown collider, show an error
 			System.out.print("Error: An unknown collision has occurred!");
@@ -151,4 +161,26 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		updateHeading();
 		updateEnergyLevel();
 	}
+	
+	//Checks for death and updates the cyborg if death occurs (they lose one life)
+	public boolean isDead() {
+		if(energyLevel == 0 || (damageLevel == maxDamageLevel)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isGameover() {
+		if(this.lives == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void loseALife() {
+		this.lives -= 1;
+	}
+	
 }

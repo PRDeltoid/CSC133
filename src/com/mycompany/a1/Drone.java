@@ -29,7 +29,6 @@ public class Drone extends MovableGameObject {
 		
 		//update drone heading
 		this.setHeading(this.getHeading() + headingAdjustment);
-		
 	}
 
 	public void update() {

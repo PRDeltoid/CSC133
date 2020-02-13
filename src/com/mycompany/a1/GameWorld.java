@@ -16,16 +16,19 @@ public class GameWorld {
 	public GameWorld(int height, int width) {
 		this.height = height;
 		this.width = width;
+
+		//Create our player
+		//This is not done in init() because init() is used to reset the map (but not the player!) in case the player cyborg cannot move (is dead)
+		//Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int lives, int maxDamageLevel, boolean isPlayer) {
+		player = new Cyborg(0,0,40,ColorUtil.MAGENTA,0,10,50,100,5,3,10,true);
 	}
 	
 	public void init() {
-		//TODO Add more objects to the game world (bases, drones, energy stations)
 		//Initialize map variables
 		Random rand = new Random();
-
-		//Add our player
-		//Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int lives, int maxDamageLevel, boolean isPlayer) {
-		player = new Cyborg(0,0,40,ColorUtil.MAGENTA,0,10,50,100,5,3,10,true);
+		
+		//If we're resetting, delete all current non-player game objects and recreate them
+		objects.clear();
 		objects.add(player);
 
 		//Add our bases
@@ -36,14 +39,14 @@ public class GameWorld {
 		objects.add(new Base(rand.nextFloat() % height, rand.nextFloat() % width,10,ColorUtil.BLUE,4));
 
 		//EnergyStation(float x, float y, int size, int color) {
-		//2 energy stations with random location and size (and thus, random capacity)
+		//2 energy stations with random location and size (0-49) (and thus, random capacity)
 		objects.add(new EnergyStation(rand.nextFloat() % height, rand.nextFloat() % width, rand.nextInt() % 50, ColorUtil.GREEN));
 		objects.add(new EnergyStation(rand.nextFloat() % height, rand.nextFloat() % width, rand.nextInt() % 50, ColorUtil.GREEN));
 		
 		//Drone(float x, float y, int size, int color, int heading, int speed) {
-		//2 drones with random location, fixed size, and random speed and heading
-		objects.add(new Drone(rand.nextFloat() % height, rand.nextFloat() % width, 10, ColorUtil.YELLOW, rand.nextInt() % 360, rand.nextInt() % 10));
-		objects.add(new Drone(rand.nextFloat() % height, rand.nextFloat() % width, 10, ColorUtil.YELLOW, rand.nextInt() % 360, rand.nextInt() % 10));
+		//2 drones with random location, fixed size, and random speed (5-10) and heading (0-359)
+		objects.add(new Drone(rand.nextFloat() % height, rand.nextFloat() % width, 10, ColorUtil.YELLOW, rand.nextInt() % 360, (rand.nextInt() % 5) + 5));
+		objects.add(new Drone(rand.nextFloat() % height, rand.nextFloat() % width, 10, ColorUtil.YELLOW, rand.nextInt() % 360, (rand.nextInt() % 5) + 5));
 	}
 	
 	public void printMapInfo() {
@@ -91,7 +94,6 @@ public class GameWorld {
 		}
 		//Return our random drone
 		return (EnergyStation) object;
-		
 		
 	}
 }

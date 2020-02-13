@@ -7,6 +7,10 @@ public class EnergyStation extends FixedGameObject {
 	private int capacity;
 	final private double capcityMod = 0.4;
 	
+	public int getCapacity() {
+		return this.capacity;
+	}
+	
 	public EnergyStation(float x, float y, int size, int color) {
 		super(x,y,size,color);
 		//capacity is determined by the size multiplied by a modifier (capcityMod)
@@ -23,4 +27,9 @@ public class EnergyStation extends FixedGameObject {
 	}
 	
 	public void update() {}
+	
+	//Drain the energy capacity of the EnergyStation
+	public void emptyCapacity() {
+		this.capacity = 0;
+	}
 }
