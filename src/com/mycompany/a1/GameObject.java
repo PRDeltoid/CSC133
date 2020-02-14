@@ -29,6 +29,10 @@ abstract public class GameObject {
 		this.color = newColor;
 	}
 	
+	public Point getLocation() {
+		return this.location;
+	}
+
 	public void setLocation(float x, float y) {
 		this.location.setX(x);
 		this.location.setY(y);

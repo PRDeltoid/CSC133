@@ -5,7 +5,7 @@ import com.codename1.charts.util.ColorUtil;
 public class EnergyStation extends FixedGameObject {
 	
 	private int capacity;
-	final private double capcityMod = 0.4;
+	final private double capacityMod = 0.4;
 	
 	public int getCapacity() {
 		return this.capacity;
@@ -13,8 +13,8 @@ public class EnergyStation extends FixedGameObject {
 	
 	public EnergyStation(float x, float y, int size, int color) {
 		super(x,y,size,color);
-		//capacity is determined by the size multiplied by a modifier (capcityMod)
-		this.capacity = (int) Math.floor(size*this.capcityMod);
+		//capacity is determined by the size multiplied by a modifier (capacityMod)
+		this.capacity = (int) Math.floor(size*this.capacityMod);
 	}
 	
 	public void printInfo() {

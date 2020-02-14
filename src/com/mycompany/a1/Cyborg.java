@@ -29,6 +29,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		this.lastBaseReached = 1;
 	}
 	
+	//Default ctor
 	public Cyborg() {
 		super(0, 0, 10, ColorUtil.BLUE, 0, 0);
 		this.maximumSpeed = 50;
@@ -68,6 +69,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		this.lives = lives;
 	}
 	
+	//this will eventually become an interface (spec. from lecture)
 	public boolean isPlayer() {
 		return this.isPlayer;
 	}
@@ -178,7 +180,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	
 	//Checks for death and updates the cyborg if death occurs (they lose one life)
 	public boolean isDead() {
-		if(energyLevel == 0 || (damageLevel == maxDamageLevel)) {
+		if(energyLevel == 0 || (damageLevel >= maxDamageLevel)) {
 			return true;
 		} else {
 			return false;
@@ -195,6 +197,8 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 
 	public void loseALife() {
 		this.lives -= 1;
+		//reset our damage level
+		this.damageLevel = 0;
 	}
 	
 	private void fadeColor() {

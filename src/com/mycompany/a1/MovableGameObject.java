@@ -11,14 +11,17 @@ public abstract class MovableGameObject extends GameObject {
 		this.speed = speed;
 	}
 
+	//TODO: Fix this
 	public void move() {
 		double oldX = this.location.getX();
 		double oldY = this.location.getY();
 		double heading = Math.toRadians(90 - getHeading());
 		double deltaX = Math.cos(heading)*getSpeed();
 		double deltaY = Math.sin(heading)*getSpeed();
-		this.location.setX((float) (oldX + deltaX));
-		this.location.setY((float) (oldY + deltaY));
+		//Debug output for testing the method
+		System.out.println("Inside move() method: Old [X,Y]=[" + oldX + "," + oldY + "], heading="+heading+", New [X,Y]=["+oldX+Math.floor(deltaX)+","+oldY+Math.floor(deltaY)+"]");
+		this.location.setX((float) (oldX + Math.floor(deltaX)));
+		this.location.setY((float) (oldY + Math.floor(deltaY)));
 	}
 	
 	public int getSpeed() {
@@ -38,4 +41,6 @@ public abstract class MovableGameObject extends GameObject {
 	}
 	
 	abstract public void updateHeading();
+
+	
 }

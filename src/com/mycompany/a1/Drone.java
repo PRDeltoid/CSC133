@@ -10,6 +10,7 @@ public class Drone extends MovableGameObject {
 		super(x,y,size,color,heading,speed);
 	}
 
+	//Drones cannot set color after creation
 	public void setColor() {}
 
 	public void printInfo() {
@@ -25,7 +26,7 @@ public class Drone extends MovableGameObject {
 		Random rand = new Random();
 		//Drones randomly update their heading to be 5 degrees in either direction
 		//generate a random number between -5 and 5
-		int headingAdjustment = rand.nextInt(5 + 5) - 5;
+		int headingAdjustment = rand.nextInt(10) - 5;
 		
 		//update drone heading
 		this.setHeading(this.getHeading() + headingAdjustment);

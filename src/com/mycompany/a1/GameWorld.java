@@ -8,11 +8,41 @@ import com.codename1.charts.util.ColorUtil;
 
 public class GameWorld {
 
-	private int height;
-	private int width;
+	//TODO: invert these?
+	private int height; //currently "X"
+	private int width;	//currently "Y"
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	private Cyborg player;
 	
+	//helper function to make sure a given value falls within a range
+	//this is very useful if we need to make sure a given X or Y value is within our map
+	//if the X or Y value is outside of our clamp, we make it the maximum or minimum value (depending on if it is under or over our clamp values respectively)
+	static private float clamp(float value, float max, float min) {
+		//Take the maximum of our largest possible value (the minimum of the value and max) and our minimum value
+		return Math.max(min, Math.min(value, max));
+		
+	}
+	
+	//Checks if a given unit is within a given boundary
+	//Commonly used for bounds checking
+	private boolean isInsideBoundary(GameObject object) {
+		return ((0 <= object.getLocation().getX()) &&
+				(0 <= object.getLocation().getY()) && 
+				(height >= object.getLocation().getX()) && 
+				(width >= object.getLocation().getY()));
+	}
+	
+	//Checks if a given object is outside of the game boundaries
+	private boolean isOutOfBounds(GameObject object) {
+		return !isInsideBoundary(object);
+	}
+
+	//Nudges an object back into the game world
+	private void nudgeInsideBoundary(GameObject object) {
+		object.setLocation(clamp(object.getLocation().getX(),0,height), clamp(object.getLocation().getY(),0,width));
+	}
+
+	//Ctor
 	public GameWorld(int height, int width) {
 		this.height = height;
 		this.width = width;
@@ -30,23 +60,24 @@ public class GameWorld {
 		//If we're resetting, delete all current non-player game objects and recreate them
 		objects.clear();
 		objects.add(player);
+		player.setLocation(0, 0);
 
 		//Add our bases
 		//4 bases, random location, blue color, sequenced in order
 		objects.add(new Base(0,0,10,ColorUtil.BLUE,1));
-		objects.add(new Base(rand.nextFloat() % height, rand.nextFloat() % width,10,ColorUtil.BLUE,2));
-		objects.add(new Base(rand.nextFloat() % height, rand.nextFloat() % width,10,ColorUtil.BLUE,3));
-		objects.add(new Base(rand.nextFloat() % height, rand.nextFloat() % width,10,ColorUtil.BLUE,4));
+		objects.add(new Base(rand.nextInt(height), rand.nextInt(width),10,ColorUtil.BLUE,2));
+		objects.add(new Base(rand.nextInt(height), rand.nextInt(width),10,ColorUtil.BLUE,3));
+		objects.add(new Base(rand.nextInt(height), rand.nextInt(width),10,ColorUtil.BLUE,4));
 
 		//EnergyStation(float x, float y, int size, int color) {
-		//2 energy stations with random location and size (0-49) (and thus, random capacity)
-		objects.add(new EnergyStation(rand.nextFloat() % height, rand.nextFloat() % width, rand.nextInt() % 50, ColorUtil.GREEN));
-		objects.add(new EnergyStation(rand.nextFloat() % height, rand.nextFloat() % width, rand.nextInt() % 50, ColorUtil.GREEN));
+		//2 energy stations with random location and size (1-50) (and thus, random capacity)
+		objects.add(new EnergyStation(rand.nextInt(height), rand.nextInt(width), rand.nextInt(49)+1, ColorUtil.GREEN));
+		objects.add(new EnergyStation(rand.nextInt(height), rand.nextInt(width), rand.nextInt(49)+1, ColorUtil.GREEN));
 		
 		//Drone(float x, float y, int size, int color, int heading, int speed) {
 		//2 drones with random location, fixed size, and random speed (5-10) and heading (0-359)
-		objects.add(new Drone(rand.nextFloat() % height, rand.nextFloat() % width, 10, ColorUtil.YELLOW, rand.nextInt() % 360, (rand.nextInt() % 5) + 5));
-		objects.add(new Drone(rand.nextFloat() % height, rand.nextFloat() % width, 10, ColorUtil.YELLOW, rand.nextInt() % 360, (rand.nextInt() % 5) + 5));
+		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
+		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
 	}
 	
 	public void printMapInfo() {
@@ -63,30 +94,41 @@ public class GameWorld {
 	
 	//Update function is called whenever we want to update the map/game objects' state (ie. every game tick)
 	public void update() {
+		//This iterator will be replaced in Assignment 2 with a custom-built iterator
+		//For now, we're just going to use the Java built-in iterator
 		Iterator<GameObject> objects = this.objects.iterator();
 		
 		//Iterate through every game object and apply relevant updates to it
 		while(objects.hasNext()) {
 			GameObject object = objects.next();
 			object.update();
+			//Kind of hacky bounds checking. I can't figure out how to get boundary information inside a movable object (and thus, accessible to the move() method)
+			//If an object is movable and is not inside the boundary, move it back in
+			if(isOutOfBounds(object)) {
+				System.out.println("Outside of boundary, nudging back in");
+				nudgeInsideBoundary(object);
+			}
 		}
 	}
 	
-	//helper function to get a random drone from the gameobject list
+
+	//helper function to get a random drone from the gameObject list
+	//THIS FUNCTION CAN CAUSE INFINITE LOOP IF NO DRONE EXISTS. BE CAREFUL!!!
 	public Drone debugGetRandomDrone() {
-		//Randomly pick objects until we pick a drone, basically
+		//Randomly pick objects until we pick a drone
 		Random rand = new Random();
 		GameObject object = objects.get(rand.nextInt() % objects.size());
 		while(!(object instanceof Drone)) {
-			object = objects.get(rand.nextInt() % objects.size());
+			object = objects.get(rand.nextInt(objects.size()));
 		}
 		//Return our random drone
 		return (Drone) object;
 		
 	}
 	
+	//THIS FUNCTION CAN CAUSE INFINITE LOOP IF NO ENERGYSTATIONS EXISTS. BE CAREFUL!!!
 	public EnergyStation debugGetRandomEnergyStation() {
-		//Randomly pick objects until we pick a energyStation, basically
+		//Randomly pick objects until we pick a energyStation
 		Random rand = new Random();
 		GameObject object = objects.get(rand.nextInt() % objects.size());
 		while(!(object instanceof EnergyStation)) {
