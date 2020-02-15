@@ -56,7 +56,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	}
 	
 	//Updates the cyborg's heading based upon its current steering direction
-	public void updateHeading() {
+	protected void updateHeading() {
 		//Make sure we our heading always falls within 0-359
 		setHeading((getHeading() + this.steeringDirection) % 360);
 	}

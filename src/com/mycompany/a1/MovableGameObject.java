@@ -11,7 +11,7 @@ public abstract class MovableGameObject extends GameObject {
 		this.speed = speed;
 	}
 
-	//TODO: Fix this
+	//TODO: Fix this?
 	public void move() {
 		double oldX = this.location.getX();
 		double oldY = this.location.getY();
@@ -24,23 +24,23 @@ public abstract class MovableGameObject extends GameObject {
 		this.location.setY((float) (oldY + Math.floor(deltaY)));
 	}
 	
-	public int getSpeed() {
+	protected int getSpeed() {
 		return speed;
 	}
 	
-	public void setSpeed(int speed) {
+	protected void setSpeed(int speed) {
 		this.speed = speed;
 	}
 	
-	public int getHeading() {
+	protected int getHeading() {
 		return heading;
 	}
 	
-	public void setHeading(int heading) {
+	protected void setHeading(int heading) {
 		this.heading = heading;
 	}
 	
-	abstract public void updateHeading();
+	protected abstract void updateHeading();
 
 	
 }

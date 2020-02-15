@@ -22,7 +22,7 @@ public class Drone extends MovableGameObject {
 		System.out.print("\n");
 	}
 
-	public void updateHeading() {
+	protected void updateHeading() {
 		Random rand = new Random();
 		//Drones randomly update their heading to be 5 degrees in either direction
 		//generate a random number between -5 and 5
