@@ -37,4 +37,8 @@ public class Drone extends MovableGameObject {
 		updateHeading();
 	}
 
+	public String getClassName() {
+		return "Drone";
+	}
+	
 }

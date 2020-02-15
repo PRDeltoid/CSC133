@@ -18,8 +18,11 @@ public abstract class MovableGameObject extends GameObject {
 		double heading = Math.toRadians(90 - getHeading());
 		double deltaX = Math.cos(heading)*getSpeed();
 		double deltaY = Math.sin(heading)*getSpeed();
+		//Currently flooring deltas to make sure our decimal numbers arn't too long. May end up rounding to the 10s or 100s decimal place later
+		double newX = oldX+Math.floor(deltaX);
+		double newY = oldY+Math.floor(deltaY);
 		//Debug output for testing the method
-		System.out.println("Inside move() method: Old [X,Y]=[" + oldX + "," + oldY + "], heading="+heading+", New [X,Y]=["+oldX+Math.floor(deltaX)+","+oldY+Math.floor(deltaY)+"]");
+		System.out.println("Inside "+getClassName()+" move() method: Old [X,Y]=[" + oldX + "," + oldY + "], heading="+getHeading()+", New [X,Y]=["+newX+" ("+oldX+"+"+Math.floor(deltaX)+"),"+newY+" ("+oldY+"+"+Math.floor(deltaY)+")]");
 		this.location.setX((float) (oldX + Math.floor(deltaX)));
 		this.location.setY((float) (oldY + Math.floor(deltaY)));
 	}

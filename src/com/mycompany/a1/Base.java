@@ -26,4 +26,9 @@ public class Base extends FixedGameObject {
 	}
 
 	public void update() {}
+
+	public String getClassName() {
+		return "Base " + this.getSequenceNumber();
+	}
+	
 }

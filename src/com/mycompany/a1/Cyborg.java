@@ -121,6 +121,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	
 	//Decrease the cyborg's speed by a fixed amount
 	public void brake(int speedMod) {
+		//Make sure speed doesn't go below 0
 		int newSpeed = Math.max(0,this.getSpeed()-speedMod);
 		this.setSpeed(newSpeed);
 	}
@@ -203,6 +204,10 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	
 	private void fadeColor() {
 		this.color =- ColorUtil.red(25);
+	}
+	
+	public String getClassName() {
+		return "Cyborg";
 	}
 	
 }

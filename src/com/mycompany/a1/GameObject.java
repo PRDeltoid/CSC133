@@ -44,5 +44,7 @@ abstract public class GameObject {
 	
 	//Every object must have an update method, called whenever the game ticks
 	abstract void update();
+	
+	abstract String getClassName();
 
 }

@@ -60,6 +60,7 @@ public class GameWorld {
 		//If we're resetting, delete all current non-player game objects and recreate them
 		objects.clear();
 		objects.add(player);
+		//Move player back to "start". Currently hardcoded at 0,0 (with Base 1, seen below)
 		player.setLocation(0, 0);
 
 		//Add our bases
@@ -105,7 +106,7 @@ public class GameWorld {
 			//Kind of hacky bounds checking. I can't figure out how to get boundary information inside a movable object (and thus, accessible to the move() method)
 			//If an object is movable and is not inside the boundary, move it back in
 			if(isOutOfBounds(object)) {
-				System.out.println("Outside of boundary, nudging back in");
+				System.out.println(object.getClassName() + " is out of bounds, nudging back in");
 				nudgeInsideBoundary(object);
 			}
 		}
@@ -117,9 +118,9 @@ public class GameWorld {
 	public Drone debugGetRandomDrone() {
 		//Randomly pick objects until we pick a drone
 		Random rand = new Random();
-		GameObject object = objects.get(rand.nextInt() % objects.size());
+		GameObject object = objects.get(rand.nextInt(objects.size()-1));
 		while(!(object instanceof Drone)) {
-			object = objects.get(rand.nextInt(objects.size()));
+			object = objects.get(rand.nextInt(objects.size()-1));
 		}
 		//Return our random drone
 		return (Drone) object;
@@ -130,9 +131,9 @@ public class GameWorld {
 	public EnergyStation debugGetRandomEnergyStation() {
 		//Randomly pick objects until we pick a energyStation
 		Random rand = new Random();
-		GameObject object = objects.get(rand.nextInt() % objects.size());
+		GameObject object = objects.get(rand.nextInt(objects.size()-1));
 		while(!(object instanceof EnergyStation)) {
-			object = objects.get(rand.nextInt() % objects.size());
+			object = objects.get(rand.nextInt(objects.size())-1);
 		}
 		//Return our random energyStation 
 		return (EnergyStation) object;

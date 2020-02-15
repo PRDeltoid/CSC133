@@ -32,4 +32,9 @@ public class EnergyStation extends FixedGameObject {
 	public void emptyCapacity() {
 		this.capacity = 0;
 	}
+
+	public String getClassName() {
+		return "EnergyStation";
+	}
+	
 }
