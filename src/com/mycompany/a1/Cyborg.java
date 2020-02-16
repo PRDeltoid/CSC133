@@ -6,6 +6,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	
 	private int maximumSpeed;
 	private int energyLevel;
+	private int startEnergyLevel;
 	private int energyConsumptionRate;
 	private int damageLevel;
 	private int maxDamageLevel;
@@ -19,6 +20,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		super(x, y, size, color, heading, speed);
 		this.maximumSpeed = maxSpeed;
 		this.energyLevel = energyLevel;
+		this.startEnergyLevel = energyLevel;
 		this.energyConsumptionRate = energyConsumptionRate;
 		this.maxDamageLevel = maxDamageLevel;
 		this.isPlayer = isPlayer;
@@ -80,6 +82,10 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	
 	public int getEnergyLevel() {
 		return this.energyLevel;
+	}
+	
+	public void resetEnergyLevel() {
+		this.energyLevel = startEnergyLevel;
 	}
 	
 	private void addEnergy(int energy) {

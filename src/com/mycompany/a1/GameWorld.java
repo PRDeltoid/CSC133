@@ -134,6 +134,7 @@ public class GameWorld {
 			} else {
 				init();
 				getPlayer().resetDamageLevel();
+				getPlayer().resetEnergyLevel();
 			}
 		//Hardcoded victory check for our 4 hardcoded bases
 		} else if(getPlayer().getLastBase() == 4) {
