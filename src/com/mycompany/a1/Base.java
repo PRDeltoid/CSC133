@@ -16,13 +16,12 @@ public class Base extends FixedGameObject {
 
 	public void setColor() { }
 	
-	public void printInfo() {
-		System.out.print("Base:");
-		System.out.print(" loc=" + this.location.getX() + "," + this.location.getY());
-		System.out.print(" color=[" + ColorUtil.red(this.color) + "," + ColorUtil.blue(this.color) + "," + ColorUtil.green(this.color) + "]");
-		System.out.print(" size=" + this.size);
-		System.out.print(" seqNum=" + this.sequenceNumber);
-		System.out.print("\n");
+	public String toString() {
+		return "Base:" +
+		" loc=" + this.location.getX() + "," + this.location.getY() +
+		" color=[" + ColorUtil.red(this.color) + "," + ColorUtil.blue(this.color) + "," + ColorUtil.green(this.color) + "]" +
+		" size=" + this.size +
+		" seqNum=" + this.sequenceNumber;
 	}
 
 	public void update() {}

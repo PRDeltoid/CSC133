@@ -93,7 +93,7 @@ public class GameWorld {
 		Iterator<GameObject> iter = objects.iterator();
 		while(iter.hasNext()) {
 			GameObject object = (GameObject) iter.next();
-			object.printInfo();
+			System.out.println(object.toString());
 		}
 	}
 	

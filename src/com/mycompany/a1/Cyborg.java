@@ -106,18 +106,17 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		this.energyLevel -= this.energyConsumptionRate;
 	}
 
-	public void printInfo() {
-		System.out.print("Cyborg: loc=" + this.location.getX() + "," + this.location.getY());
-		System.out.print(" color=[" + ColorUtil.red(this.color) + "," + ColorUtil.blue(this.color) + "," + ColorUtil.green(this.color) + "]");
-		System.out.print(" heading=" + this.getHeading());
-		System.out.print(" speed=" + this.getSpeed());
-		System.out.print(" size=" + this.getSize());
-		System.out.print(" maxSpeed=" + this.maximumSpeed);
-		System.out.print(" steeringDirection=" + this.steeringDirection);
-		System.out.print(" energyLevel=" + this.getEnergyLevel());
-		System.out.print(" damage=" + this.getDamageLevel());
-		System.out.print(" isPlayer=" + this.isPlayer());
-		System.out.print("\n");
+	public String toString() {
+		return "Cyborg: loc=" + this.location.getX() + "," + this.location.getY() +
+		" color=[" + ColorUtil.red(this.color) + "," + ColorUtil.blue(this.color) + "," + ColorUtil.green(this.color) + "]" +
+		" heading=" + this.getHeading() +
+		" speed=" + this.getSpeed() +
+		" size=" + this.getSize() +
+		" maxSpeed=" + this.maximumSpeed +
+		" steeringDirection=" + this.steeringDirection +
+		" energyLevel=" + this.getEnergyLevel() +
+		" damage=" + this.getDamageLevel() +
+		" isPlayer=" + this.isPlayer();
 	}
 	
 	//Decrease the cyborg's speed by a fixed amount

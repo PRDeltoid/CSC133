@@ -2,7 +2,7 @@ package com.mycompany.a1;
 
 import com.codename1.charts.models.Point;
 
-abstract public class GameObject {
+abstract public class GameObject extends Object {
 	Point location = new Point();
 	int size;
 	int color;
@@ -40,8 +40,9 @@ abstract public class GameObject {
 	
 	//Print the info of the object
 	//This must be implemented in subclasses because each subclass has different stats to report
-	abstract void printInfo();
-	
+	@Override
+	public abstract String toString();
+
 	//Every object must have an update method, called whenever the game ticks
 	abstract void update();
 	

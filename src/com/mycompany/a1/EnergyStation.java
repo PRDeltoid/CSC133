@@ -17,13 +17,12 @@ public class EnergyStation extends FixedGameObject {
 		this.capacity = (int) Math.floor(size*this.capacityMod);
 	}
 	
-	public void printInfo() {
-		System.out.print("EnergyStation: ");
-		System.out.print("loc=" + this.location.getX() + "," + this.location.getY());
-		System.out.print(" color=[" + ColorUtil.red(this.color) + "," + ColorUtil.blue(this.color) + "," + ColorUtil.green(this.color) + "]");
-		System.out.print(" size=" + this.size);
-		System.out.print(" capacity=" + this.capacity);
-		System.out.print("\n");
+	public String toString() {
+		return "EnergyStation: " +
+		"loc=" + this.location.getX() + "," + this.location.getY() +
+		" color=[" + ColorUtil.red(this.color) + "," + ColorUtil.blue(this.color) + "," + ColorUtil.green(this.color) + "]" +
+		" size=" + this.size +
+		" capacity=" + this.capacity;
 	}
 	
 	public void update() {}
