@@ -9,7 +9,7 @@ import java.lang.String;
 public class Game extends Form {
 	
 	private GameWorld world;
-	private int elapsedTicks;
+	//Flag to prevent further execution after game over 
 	private boolean gameOver = false;
 
 	//Flag for managing if the player has indicated they want to exit the game
@@ -19,34 +19,10 @@ public class Game extends Form {
 	//Progress the game world 1 tick
 	private void tick() {
 		//Update the game world
-		this.elapsedTicks += 1;
 		this.world.update();
-
-		//check if the player has died/can't move
-		if(world.getPlayer().isDead() == true) {
-			//Lose a life and reset the player
-			System.out.println("The Cyborg has failed. You lose one life. Try again!");
-			world.getPlayer().loseALife();
-			//Check for game over (no lives left)
-			if(world.getPlayer().isGameover()) {
-				System.out.println("Game Over! You have run out of lives");
-				//set the game over flag to disable further play
-				gameOver = true;
-			} else {
-				this.world.init();
-			}
-		}
+		gameOver = world.isGameover();
 	}
 	
-	//Debug command to read player's cyborg state
-	private void printPlayerInfo() {
-		System.out.println("Cyborg Lives: " + world.getPlayer().getLives());
-		System.out.println("Elapsed Time: " + this.elapsedTicks);
-		System.out.println("Highest Base: " + world.getPlayer().getLastBase());
-		System.out.println("Energy Level: " + world.getPlayer().getEnergyLevel());
-		System.out.println("Damage Level: " + world.getPlayer().getDamageLevel());
-	}
-
 	//Discrete simulation input
 	private void play() {
 		Label myLabel=new Label("Enter a Command:");
@@ -59,7 +35,8 @@ public class Game extends Form {
 				System.out.println("-------------------");
 				String sCommand=myTextField.getText().toString();
 				myTextField.clear();
-				if(sCommand.length() != 0)
+				//Only do something if the game isn't over
+				if(sCommand.length() != 0 && gameOver != true)
 					switch (sCommand.charAt(0)) {
 						case 'a':
 							//Accelerate cyborg (5 speed units)
@@ -118,7 +95,7 @@ public class Game extends Form {
 							break;
 						case 'd':
 							//Describe current game/player cyborg values
-							printPlayerInfo();
+							world.printPlayerInfo();
 							break;
 						case 'm':
 							//Describe the map
@@ -157,7 +134,7 @@ public class Game extends Form {
 	
 	public Game() {
 		//Create the world
-		world = new GameWorld(100,100);
+		world = new GameWorld(1000,1000);
 		//Setup the world
 		world.init();
 		//Play the game

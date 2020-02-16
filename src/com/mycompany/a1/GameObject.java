@@ -7,6 +7,10 @@ abstract public class GameObject {
 	int size;
 	int color;
 	
+	private void setSize(int size) {
+		this.size = size;
+	}
+
 	public GameObject(float x, float y, int size, int color) {
 		this.setLocation(x,y);
 		this.setSize(size);
@@ -15,10 +19,6 @@ abstract public class GameObject {
 	
 	public int getSize() {
 		return size;
-	}
-	
-	private void setSize(int size) {
-		this.size = size;
 	}
 
 	public int getColor() {

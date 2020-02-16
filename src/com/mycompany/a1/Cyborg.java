@@ -15,12 +15,11 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	
 	private int lives;
 	
-	public Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int lives, int maxDamageLevel, boolean isPlayer) {
+	public Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel, boolean isPlayer) {
 		super(x, y, size, color, heading, speed);
 		this.maximumSpeed = maxSpeed;
 		this.energyLevel = energyLevel;
 		this.energyConsumptionRate = energyConsumptionRate;
-		this.lives = lives;
 		this.maxDamageLevel = maxDamageLevel;
 		this.isPlayer = isPlayer;
 		
@@ -35,7 +34,6 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		this.maximumSpeed = 50;
 		this.energyLevel = 100;
 		this.energyConsumptionRate = 5;
-		this.lives = 3;
 		this.maxDamageLevel = 10;
 		this.isPlayer = false;
 		
@@ -60,15 +58,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		//Make sure we our heading always falls within 0-359
 		setHeading((getHeading() + this.steeringDirection) % 360);
 	}
-	
-	public int getLives() {
-		return this.lives;
-	}
-	
-	public void setLives(int lives) {
-		this.lives = lives;
-	}
-	
+
 	//this will eventually become an interface (spec. from lecture)
 	public boolean isPlayer() {
 		return this.isPlayer;
@@ -100,7 +90,12 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	public int getDamageLevel() {
 		return this.damageLevel;
 	}
-	
+
+	public void resetDamageLevel() {
+		//reset our damage level
+		this.damageLevel = 0;
+	}
+
 	public void updateEnergyLevel() {
 		this.energyLevel -= this.energyConsumptionRate;
 	}
@@ -186,20 +181,6 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		} else {
 			return false;
 		}
-	}
-	
-	public boolean isGameover() {
-		if(this.lives == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public void loseALife() {
-		this.lives -= 1;
-		//reset our damage level
-		this.damageLevel = 0;
 	}
 	
 	private void fadeColor() {

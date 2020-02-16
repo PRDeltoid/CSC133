@@ -8,11 +8,14 @@ import com.codename1.charts.util.ColorUtil;
 
 public class GameWorld {
 
-	//TODO: invert these?
 	private int height; //currently "X"
 	private int width;	//currently "Y"
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	private Cyborg player;
+	private int elapsedTicks;
+	private boolean gameOver = false;
+	private int startLives = 3;
+	private int remainingLives = startLives;
 	
 	//helper function to make sure a given value falls within a range
 	//this is very useful if we need to make sure a given X or Y value is within our map
@@ -42,6 +45,11 @@ public class GameWorld {
 		object.setLocation(clamp(object.getLocation().getX(),0,height), clamp(object.getLocation().getY(),0,width));
 	}
 
+	
+	public boolean isGameover() {
+		return (remainingLives==0);
+	}
+
 	//Ctor
 	public GameWorld(int height, int width) {
 		this.height = height;
@@ -50,7 +58,7 @@ public class GameWorld {
 		//Create our player
 		//This is not done in init() because init() is used to reset the map (but not the player!) in case the player cyborg cannot move (is dead)
 		//Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int lives, int maxDamageLevel, boolean isPlayer) {
-		player = new Cyborg(0,0,40,ColorUtil.MAGENTA,0,10,50,100,5,3,10,true);
+		player = new Cyborg(0,0,40,ColorUtil.MAGENTA,0,10,50,100,5,10,true);
 	}
 	
 	public void init() {
@@ -95,6 +103,8 @@ public class GameWorld {
 	
 	//Update function is called whenever we want to update the map/game objects' state (ie. every game tick)
 	public void update() {
+		this.elapsedTicks += 1;
+
 		//This iterator will be replaced in Assignment 2 with a custom-built iterator
 		//For now, we're just going to use the Java built-in iterator
 		Iterator<GameObject> objects = this.objects.iterator();
@@ -110,8 +120,38 @@ public class GameWorld {
 				nudgeInsideBoundary(object);
 			}
 		}
+
+		//check if the player has died/can't move
+		if(getPlayer().isDead() == true) {
+			//Lose a life and reset the player
+			System.out.println("The Cyborg has failed. You lose one life. Try again!");
+			remainingLives -= 1;
+			//Check for game over (no lives left)
+			if(isGameover()) {
+				System.out.println("Game Over! You have run out of lives");
+				//set the game over flag to disable further play
+				gameOver = true;
+			} else {
+				init();
+				getPlayer().resetDamageLevel();
+			}
+		//Hardcoded victory check for our 4 hardcoded bases
+		} else if(getPlayer().getLastBase() == 4) {
+			System.out.println("Game over, you win! Total time: #"+elapsedTicks);
+			gameOver = true;
+			
+		}
 	}
 	
+	//Debug command to read player's cyborg state
+	public void printPlayerInfo() {
+		System.out.println("Cyborg Lives: " + remainingLives);
+		System.out.println("Elapsed Time: " + elapsedTicks);
+		System.out.println("Highest Base: " + getPlayer().getLastBase());
+		System.out.println("Energy Level: " + getPlayer().getEnergyLevel());
+		System.out.println("Damage Level: " + getPlayer().getDamageLevel());
+	}
+
 
 	//helper function to get a random drone from the gameObject list
 	//THIS FUNCTION CAN CAUSE INFINITE LOOP IF NO DRONE EXISTS. BE CAREFUL!!!
