@@ -1,8 +1,13 @@
 package com.mycompany.a1;
 import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.layouts.BorderLayout;
+import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
 import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.Component;
+import com.codename1.ui.Container;
 import com.codename1.ui.Form;
 import java.lang.String;
 
@@ -26,10 +31,34 @@ public class Game extends Form {
 	//Discrete simulation input
 	private void play() {
 		Label myLabel=new Label("Enter a Command:");
+		
+		Container mainContainer = new Container();
+		mainContainer.setLayout(new BorderLayout());
+		Container eastContainer = new Container();
+		eastContainer.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
+		eastContainer.add(new Label("East"));
+		Container westContainer = new Container();
+		westContainer.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
+		westContainer.add(new Label("West"));
+		Container northContainer = new ScoreView();
+		Container southContainer = new Container();
+		southContainer.setLayout(new FlowLayout(Component.CENTER));
+		southContainer.add(new Label("South"));
+		Container centerContainer = new MapView();
+		
+		mainContainer.add(BorderLayout.CENTER, centerContainer);
+		mainContainer.add(BorderLayout.NORTH, northContainer);
+		mainContainer.add(BorderLayout.SOUTH, southContainer);
+		mainContainer.add(BorderLayout.EAST, eastContainer);
+		mainContainer.add(BorderLayout.WEST, westContainer);
+		
+		this.addComponent(mainContainer);
+		this.show();
+
+		/*
 		this.addComponent(myLabel);
 		final TextField myTextField=new TextField();
 		this.addComponent(myTextField);
-		this.show();
 		myTextField.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evt) {
 				System.out.println("-------------------");
@@ -41,28 +70,28 @@ public class Game extends Form {
 						case 'a':
 							//Accelerate cyborg (5 speed units)
 							System.out.println("Accelerating");
-							world.getPlayer().accelerate(5);
+							PlayerCyborg.getPlayer().accelerate(5);
 							break;
 						case 'b':
 							//Brake Cyborg (5 speed units)
 							System.out.println("Braking");
-							world.getPlayer().brake(5);
+							PlayerCyborg.getPlayer().brake(5);
 							break;
 						case 'l':
 							//Steer cyborg left 5 degrees
 							System.out.println("Steering Left");
-							world.getPlayer().steerLeft();
+							PlayerCyborg.getPlayer().steerLeft();
 							break;
 						case 'r':
 							//Steer cyborg right 5 degrees
 							System.out.println("Steering Right");
-							world.getPlayer().steerRight();
+							PlayerCyborg.getPlayer().steerRight();
 							break;
 						case 'c':
 							//Pretend cyborg collided with another cyborg
 							//We create an imaginary cyborg as none exist in our game world (yet)
 							System.out.println("Cyborg Collision!");
-							world.getPlayer().collide(new Cyborg());
+							PlayerCyborg.getPlayer().collide(new NonPlayerCyborg());
 							break;
 						case '1':
 						case '2':
@@ -76,17 +105,17 @@ public class Game extends Form {
 							//Pretend Cyborg collided with base station "n"
 							int value = sCommand.charAt(0) - '0'; //ascii hack to find the integer value of the character given
 							System.out.println("Cyborg -> Base Station" + value);
-							world.getPlayer().setLastBase(value);
+							PlayerCyborg.getPlayer().setLastBase(value);
 							break;
 						case 'e':
 							//Pretend Cyborg hit an energy station
 							System.out.println("Cyborg -> EnergyStation");
-							world.getPlayer().collide(world.debugGetRandomEnergyStation());
+							PlayerCyborg.getPlayer().collide(world.debugGetRandomEnergyStation());
 							break;
 						case 'g':
 							//Pretend Cyborg has collided with drone
 							System.out.println("Cyborg -> Drone");
-							world.getPlayer().collide(world.debugGetRandomDrone());
+							PlayerCyborg.getPlayer().collide(world.debugGetRandomDrone());
 							break;
 						case 't':
 							//Tick game clock
@@ -129,7 +158,7 @@ public class Game extends Form {
 					}
 				}
 			}
-		);
+		);*/
 	}
 	
 	public Game() {

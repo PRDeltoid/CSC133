@@ -2,7 +2,7 @@ package com.mycompany.a1;
 
 import com.codename1.charts.util.ColorUtil;
 
-public class Cyborg extends MovableGameObject implements ISteerable {
+abstract public class Cyborg extends MovableGameObject implements ISteerable {
 	
 	private int maximumSpeed;
 	private int energyLevel;
@@ -12,18 +12,16 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	private int maxDamageLevel;
 	private int lastBaseReached;
 	private int steeringDirection;
-	private boolean isPlayer;
 	
 	private int lives;
 	
-	public Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel, boolean isPlayer) {
+	public Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel) {
 		super(x, y, size, color, heading, speed);
 		this.maximumSpeed = maxSpeed;
 		this.energyLevel = energyLevel;
 		this.startEnergyLevel = energyLevel;
 		this.energyConsumptionRate = energyConsumptionRate;
 		this.maxDamageLevel = maxDamageLevel;
-		this.isPlayer = isPlayer;
 		
 		//Defaults
 		this.damageLevel = 0;
@@ -37,7 +35,6 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		this.energyLevel = 100;
 		this.energyConsumptionRate = 5;
 		this.maxDamageLevel = 10;
-		this.isPlayer = false;
 		
 		//Defaults
 		this.damageLevel = 0;
@@ -59,11 +56,6 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 	protected void updateHeading() {
 		//Make sure we our heading always falls within 0-359
 		setHeading((getHeading() + this.steeringDirection) % 360);
-	}
-
-	//this will eventually become an interface (spec. from lecture)
-	public boolean isPlayer() {
-		return this.isPlayer;
 	}
 
 	//Returns the last base a cyborg reached. 
@@ -115,8 +107,7 @@ public class Cyborg extends MovableGameObject implements ISteerable {
 		" maxSpeed=" + this.maximumSpeed +
 		" steeringDirection=" + this.steeringDirection +
 		" energyLevel=" + this.getEnergyLevel() +
-		" damage=" + this.getDamageLevel() +
-		" isPlayer=" + this.isPlayer();
+		" damage=" + this.getDamageLevel();
 	}
 	
 	//Decrease the cyborg's speed by a fixed amount

@@ -9,7 +9,6 @@ public class GameWorld {
 	private int height; //currently "X"
 	private int width;	//currently "Y"
 	private GameObjectCollection objects = new GameObjectCollection(); //ArrayList<GameObject> objects = new ArrayList<GameObject>();
-	private Cyborg player;
 	private int elapsedTicks;
 	private boolean gameOver = false;
 	private int startLives = 3;
@@ -52,11 +51,6 @@ public class GameWorld {
 	public GameWorld(int height, int width) {
 		this.height = height;
 		this.width = width;
-
-		//Create our player
-		//This is not done in init() because init() is used to reset the map (but not the player!) in case the player cyborg cannot move (is dead)
-		//Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int lives, int maxDamageLevel, boolean isPlayer) {
-		player = new Cyborg(0,0,40,ColorUtil.MAGENTA,0,10,50,100,5,10,true);
 	}
 	
 	public void init() {
@@ -65,9 +59,9 @@ public class GameWorld {
 		
 		//If we're resetting, delete all current non-player game objects and recreate them
 		objects.clear();
-		objects.add(player);
+		objects.add(PlayerCyborg.getPlayer());
 		//Move player back to "start". Currently hardcoded at 0,0 (with Base 1, seen below)
-		player.setLocation(0, 0);
+		PlayerCyborg.getPlayer().setLocation(0, 0);
 
 		//Add our bases
 		//4 bases, random location, blue color, sequenced in order
@@ -95,10 +89,6 @@ public class GameWorld {
 		}
 	}
 	
-	public Cyborg getPlayer() {
-		return this.player;
-	}
-	
 	//Update function is called whenever we want to update the map/game objects' state (ie. every game tick)
 	public void update() {
 		this.elapsedTicks += 1;
@@ -120,7 +110,7 @@ public class GameWorld {
 		}
 
 		//check if the player has died/can't move
-		if(getPlayer().isDead() == true) {
+		if(PlayerCyborg.getPlayer().isDead() == true) {
 			//Lose a life
 			System.out.println("The Cyborg has failed. You lose one life. Try again!");
 			remainingLives -= 1;
@@ -132,11 +122,11 @@ public class GameWorld {
 			// otherwise reset the player
 			} else {
 				init();
-				getPlayer().resetDamageLevel();
-				getPlayer().resetEnergyLevel();
+				PlayerCyborg.getPlayer().resetDamageLevel();
+				PlayerCyborg.getPlayer().resetEnergyLevel();
 			}
 		//Hardcoded victory check for our 4 hardcoded bases
-		} else if(getPlayer().getLastBase() == 4) {
+		} else if(PlayerCyborg.getPlayer().getLastBase() == 4) {
 			System.out.println("Game over, you win! Total time: #"+elapsedTicks);
 			gameOver = true;
 			
@@ -147,9 +137,9 @@ public class GameWorld {
 	public void printPlayerInfo() {
 		System.out.println("Cyborg Lives: " + remainingLives);
 		System.out.println("Elapsed Time: " + elapsedTicks);
-		System.out.println("Highest Base: " + getPlayer().getLastBase());
-		System.out.println("Energy Level: " + getPlayer().getEnergyLevel());
-		System.out.println("Damage Level: " + getPlayer().getDamageLevel());
+		System.out.println("Highest Base: " + PlayerCyborg.getPlayer().getLastBase());
+		System.out.println("Energy Level: " + PlayerCyborg.getPlayer().getEnergyLevel());
+		System.out.println("Damage Level: " + PlayerCyborg.getPlayer().getDamageLevel());
 	}
 
 

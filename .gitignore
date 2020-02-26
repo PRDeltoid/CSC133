@@ -9,7 +9,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-dist/*.jar
+dist/
 
 # External tool builders
 .externalToolBuilders/
