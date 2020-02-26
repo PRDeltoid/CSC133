@@ -1,7 +1,5 @@
 package com.mycompany.a1;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 import com.codename1.charts.util.ColorUtil;
@@ -10,7 +8,7 @@ public class GameWorld {
 
 	private int height; //currently "X"
 	private int width;	//currently "Y"
-	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
+	private GameObjectCollection objects = new GameObjectCollection(); //ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	private Cyborg player;
 	private int elapsedTicks;
 	private boolean gameOver = false;
@@ -90,7 +88,7 @@ public class GameWorld {
 	}
 	
 	public void printMapInfo() {
-		Iterator<GameObject> iter = objects.iterator();
+		IIterator iter = objects.getIterator();
 		while(iter.hasNext()) {
 			GameObject object = (GameObject) iter.next();
 			System.out.println(object.toString());
@@ -107,11 +105,11 @@ public class GameWorld {
 
 		//This iterator will be replaced in Assignment 2 with a custom-built iterator
 		//For now, we're just going to use the Java built-in iterator
-		Iterator<GameObject> objects = this.objects.iterator();
+		IIterator objects = this.objects.getIterator();
 		
 		//Iterate through every game object and apply relevant updates to it
 		while(objects.hasNext()) {
-			GameObject object = objects.next();
+			GameObject object = (GameObject) objects.next();
 			object.update();
 			//Kind of hacky bounds checking. I can't figure out how to get boundary information inside a movable object (and thus, accessible to the move() method)
 			//If an object is movable and is not inside the boundary, move it back in
@@ -123,7 +121,7 @@ public class GameWorld {
 
 		//check if the player has died/can't move
 		if(getPlayer().isDead() == true) {
-			//Lose a life and reset the player
+			//Lose a life
 			System.out.println("The Cyborg has failed. You lose one life. Try again!");
 			remainingLives -= 1;
 			//Check for game over (no lives left)
@@ -131,6 +129,7 @@ public class GameWorld {
 				System.out.println("Game Over! You have run out of lives");
 				//set the game over flag to disable further play
 				gameOver = true;
+			// otherwise reset the player
 			} else {
 				init();
 				getPlayer().resetDamageLevel();
