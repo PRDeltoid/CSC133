@@ -117,6 +117,10 @@ abstract public class Cyborg extends MovableGameObject implements ISteerable {
 		this.setSpeed(newSpeed);
 	}
 	
+	public void brake() {
+		this.brake(5);
+	}
+	
 	//Increase the cyborg's speed by a factor related to it's current damage level
 	//The higher the damage, the lower the additional speed
 	public void accelerate(int speedMod) {
@@ -125,6 +129,10 @@ abstract public class Cyborg extends MovableGameObject implements ISteerable {
 		this.setSpeed(newSpeed);
 		//Update speed to make sure we are within our adjusted max speed range (see updateSpeed method)
 		updateSpeed();
+	}
+	
+	public void accelerate() {
+		this.accelerate(5);
 	}
 	
 	private void updateSpeed() {

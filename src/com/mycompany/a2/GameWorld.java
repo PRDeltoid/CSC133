@@ -1,18 +1,20 @@
 package com.mycompany.a2;
 
+import java.util.Observable;
 import java.util.Random;
 
 import com.codename1.charts.util.ColorUtil;
 
-public class GameWorld {
+public class GameWorld extends Observable {
 
 	private int height; //currently "X"
 	private int width;	//currently "Y"
 	private GameObjectCollection objects = new GameObjectCollection(); //ArrayList<GameObject> objects = new ArrayList<GameObject>();
-	private int elapsedTicks;
+	private int elapsedTicks = 0;
 	private boolean gameOver = false;
 	private int startLives = 3;
 	private int remainingLives = startLives;
+	private boolean sound = false;
 	
 	//helper function to make sure a given value falls within a range
 	//this is very useful if we need to make sure a given X or Y value is within our map
@@ -42,7 +44,18 @@ public class GameWorld {
 		object.setLocation(clamp(object.getLocation().getX(),0,height), clamp(object.getLocation().getY(),0,width));
 	}
 
+	public int getElapsedTicks() {
+		return elapsedTicks;
+	}
 	
+	public int getRemainingLives() {
+		return remainingLives;
+	}
+	
+	public boolean getSound() {
+		return sound;
+	}
+
 	public boolean isGameover() {
 		return (remainingLives==0);
 	}
@@ -79,6 +92,9 @@ public class GameWorld {
 		//2 drones with random location, fixed size, and random speed (5-10) and heading (0-359)
 		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
 		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
+		
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void printMapInfo() {
@@ -131,6 +147,9 @@ public class GameWorld {
 			gameOver = true;
 			
 		}
+		
+		setChanged();
+		notifyObservers();
 	}
 	
 	//Debug command to read player's cyborg state
@@ -141,7 +160,6 @@ public class GameWorld {
 		System.out.println("Energy Level: " + PlayerCyborg.getPlayer().getEnergyLevel());
 		System.out.println("Damage Level: " + PlayerCyborg.getPlayer().getDamageLevel());
 	}
-
 
 	//helper function to get a random drone from the gameObject list
 	//THIS FUNCTION CAN CAUSE INFINITE LOOP IF NO DRONE EXISTS. BE CAREFUL!!!
