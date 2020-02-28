@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>A1Prj</name>
+	<name>A2Prj</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -23,6 +23,6 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>codenameone.codenameonenature</nature>		
+		<nature>codenameone.codenameonenature</nature>
 	</natures>
 </projectDescription>
