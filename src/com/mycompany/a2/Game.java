@@ -190,7 +190,11 @@ public class Game extends Form {
 			AccelerateCommand accelerateCommand = new AccelerateCommand();
 			LeftCommand leftCommand = new LeftCommand();
 			TickCommand tickCommand = new TickCommand();
-			
+			ChangeStratCommand changeStratCommand = new ChangeStratCommand();
+			CollideNPCCommand collideNPCCommand = new CollideNPCCommand(world);
+			CollideBaseCommand collideBaseCommand = new CollideBaseCommand(world);
+			CollideEnergyStationCommand collideEnergyStationCommand = new CollideEnergyStationCommand(world);
+			CollideDroneCommand collideDroneCommand = new CollideDroneCommand(world);
 			
 			 brakeBtn = new MyButton("Break");
 			 brakeBtn.setCommand(brakeCommand);
@@ -210,10 +214,21 @@ public class Game extends Form {
 			 addKeyListener('l', leftCommand);
 			 
 			 changeStratBtn = new MyButton("Change Strat");
+			 changeStratBtn.setCommand(changeStratCommand);
+			 
 			 collideNPCBtn = new MyButton("Collide NPC");
+			 collideNPCBtn.setCommand(collideNPCCommand);
+
 			 collideBaseBtn = new MyButton("Collide Base");
+			 collideBaseBtn.setCommand(collideBaseCommand);
+
 			 collideEnergyStationBtn = new MyButton("Collide EnergyStation");
+			 collideEnergyStationBtn.setCommand(collideEnergyStationCommand);
+			 addKeyListener('e', collideEnergyStationCommand);
+
 			 collideDroneBtn = new MyButton("Collide Drone");
+			 collideDroneBtn.setCommand(collideDroneCommand);
+			 addKeyListener('g', collideDroneCommand);
 
 			 tickBtn = new MyButton("Tick");
 			 tickBtn.setCommand(tickCommand);
@@ -344,6 +359,86 @@ public class Game extends Form {
 		
 	}
 	
+	private class ChangeStratCommand extends Command {
+		GameWorld target;
+		
+		public ChangeStratCommand() {
+			super("ChangeStrat");
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Change Strat command invoked");
+			//TODO
+		}
+		
+	}
+	
+	private class CollideNPCCommand extends Command {
+		GameWorld target;
+		
+		public CollideNPCCommand(GameWorld target) {
+			super("CollideNPC");
+			this.target = target;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Collide NPC command invoked");
+			PlayerCyborg.getPlayer().collide(target.debugGetRandomDrone());
+		}
+		
+	}
+
+	private class CollideBaseCommand extends Command {
+		GameWorld target;
+		
+		public CollideBaseCommand(GameWorld target) {
+			super("CollideBase");
+			this.target = target;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//TODO
+			System.out.println("Collide Base command invoked");
+		}
+		
+	}
+
+	private class CollideEnergyStationCommand extends Command {
+		GameWorld target;
+		
+		public CollideEnergyStationCommand(GameWorld target) {
+			super("CollideEnergyStation");
+			this.target = target;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//TODO
+			System.out.println("Collide Energy Station command invoked");
+			PlayerCyborg.getPlayer().collide(world.debugGetRandomEnergyStation());
+		}
+		
+	}
+
+	private class CollideDroneCommand extends Command {
+		GameWorld target;
+		
+		public CollideDroneCommand(GameWorld target) {
+			super("CollideDrone");
+			this.target = target;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//TODO
+			System.out.println("Collide Drone command invoked");
+			PlayerCyborg.getPlayer().collide(world.debugGetRandomDrone());
+		}
+		
+	}
 	//Button styling
 	private class MyButton extends Button {
 	
