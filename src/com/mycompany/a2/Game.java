@@ -77,7 +77,6 @@ public class Game extends Form {
 		Button tickBtn;
 
 		private void setupButtons(GameWorld world) {
-			//TODO
 			BrakeCommand brakeCommand = new BrakeCommand();
 			RightCommand rightCommand = new RightCommand();
 			AccelerateCommand accelerateCommand = new AccelerateCommand();
@@ -137,12 +136,9 @@ public class Game extends Form {
 			Game.this.setToolbar(toolbar);
 			toolbar.setTitleComponent(new Label("Sili-Challenge Game"));
 
-			//Setup soundbox
-			CheckBox soundCheckbox = new CheckBox("Sound");
-			//TODO move this to MyCheckbox private class (see MyButton below)
+			//Setup sound checkbox
+			MyCheckBox soundCheckbox = new MyCheckBox("Sound");
 			soundCheckbox.setCommand(new SoundCommand());
-			soundCheckbox.getAllStyles().setBgTransparency(255);
-			soundCheckbox.getAllStyles().setBgColor(ColorUtil.LTGRAY);
 			
 			//Setup toolbar commands
 			toolbar.addComponentToLeftSideMenu(soundCheckbox);
@@ -157,11 +153,6 @@ public class Game extends Form {
 			mainContainer = new Container();
 			mainContainer.setLayout(new BorderLayout());
 
-			//TODO Fix this
-			System.out.println(Display.getInstance().getDisplayWidth());
-			System.out.println(Display.getInstance().getDisplayHeight());
-			mainContainer.setWidth(Display.getInstance().getDisplayWidth());
-			mainContainer.setHeight(Display.getInstance().getDisplayHeight());
 
 			eastContainer = new Container();
 			eastContainer.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
@@ -195,6 +186,11 @@ public class Game extends Form {
 			Game.this.addComponent(mainContainer);
 		
 				
+			//TODO Fix this
+			System.out.println(Display.getInstance().getDisplayWidth());
+			System.out.println(Display.getInstance().getDisplayHeight());
+			northContainer.setWidth(Display.getInstance().getDisplayWidth());
+			eastContainer.setHeight(Display.getInstance().getDisplayHeight());
 		}
 		
 	}
@@ -321,7 +317,6 @@ public class Game extends Form {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//TODO
 			System.out.println("Collide Energy Station command invoked");
 			PlayerCyborg.getPlayer().collide(world.debugGetRandomEnergyStation());
 		}
@@ -338,7 +333,6 @@ public class Game extends Form {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//TODO
 			System.out.println("Collide Drone command invoked");
 			PlayerCyborg.getPlayer().collide(world.debugGetRandomDrone());
 		}
@@ -417,6 +411,16 @@ public class Game extends Form {
 			this.getUnselectedStyle().setBgColor(ColorUtil.GREEN);
 			
 			this.getPressedStyle().setBgColor(ColorUtil.BLUE);
+		}
+
+	}
+
+	private class MyCheckBox extends CheckBox {
+	
+		public MyCheckBox(String label) {
+			super(label);
+			this.getAllStyles().setBgTransparency(255);
+			this.getAllStyles().setBgColor(ColorUtil.LTGRAY);
 		}
 
 	}

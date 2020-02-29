@@ -93,6 +93,13 @@ public class GameWorld extends Observable {
 		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
 		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
 		
+		/*
+		objects.add(new NonPlayerCyborg());
+		objects.add(new NonPlayerCyborg());
+		objects.add(new NonPlayerCyborg());
+		*/
+		
+		//Update views
 		setChanged();
 		notifyObservers();
 	}
@@ -182,6 +189,19 @@ public class GameWorld extends Observable {
 		}
 		//Return our random energyStation 
 		return (EnergyStation) object;
+		
+	}
+
+	//THIS FUNCTION CAN CAUSE INFINITE LOOP IF NO NPCs EXISTS. BE CAREFUL!!!
+	public NonPlayerCyborg debugGetRandomNPC() {
+		//Randomly pick objects until we pick a energyStation
+		Random rand = new Random();
+		GameObject object = objects.get(rand.nextInt(objects.size()-1));
+		while(!(object instanceof NonPlayerCyborg)) {
+			object = objects.get(rand.nextInt(objects.size())-1);
+		}
+		//Return our random energyStation 
+		return (NonPlayerCyborg) object;
 		
 	}
 }

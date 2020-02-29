@@ -21,6 +21,7 @@ public class ScoreView extends Container implements Observer {
 		this.setLayout(new FlowLayout(Component.CENTER));
 		
 		//add our starting labels
+		//TODO Add padding so labels don't shift as values change
 		timeLabel  	= new Label("Time: 0");
 		livesLabel 	= new Label("Lives Left: ");
 		baseReachedLabel = new Label("Player Last Base Reached: ");
@@ -45,6 +46,7 @@ public class ScoreView extends Container implements Observer {
 		playerEnergyLabel.setText("Player Energy Level: " + PlayerCyborg.getPlayer().getEnergyLevel());
 		playerDamageLabel.setText("Player Damage Level: " + PlayerCyborg.getPlayer().getDamageLevel());
 		soundLabel.setText("Sound: " + (((GameWorld) gameWorld).getSound() ? "ON" : "OFF"));
+		repaint();
 	}
 
 }

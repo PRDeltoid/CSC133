@@ -5,7 +5,9 @@ import java.util.Observer;
 
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Container;
+import com.codename1.ui.Display;
 import com.codename1.ui.Label;
+import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.Border;
 
@@ -13,7 +15,7 @@ public class MapView extends Container implements Observer {
 	
 	/*@Override
 	protected Dimension calcPreferredSize() {
-		return new Dimension(1000,1000);
+		return new Dimension(Display.getInstance().getDisplayWidth(),Display.getInstance().getDisplayHeight());
 	}*/
 
 	public MapView(Observable gameWorld) {
@@ -28,7 +30,7 @@ public class MapView extends Container implements Observer {
 	}
 	
 	public void update(Observable gameWorld, Object arg) {
-		//does nothing (for now)
+		((GameWorld) gameWorld).printMapInfo();
 	}
 
 }

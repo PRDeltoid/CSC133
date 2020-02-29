@@ -4,16 +4,14 @@ import com.codename1.charts.util.ColorUtil;
 
 abstract public class Cyborg extends MovableGameObject implements ISteerable {
 	
-	private int maximumSpeed;
+	protected int maximumSpeed;
 	private int energyLevel;
 	private int startEnergyLevel;
 	private int energyConsumptionRate;
 	private int damageLevel;
 	private int maxDamageLevel;
 	private int lastBaseReached;
-	private int steeringDirection;
-	
-	private int lives;
+	protected int steeringDirection;
 	
 	public Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel) {
 		super(x, y, size, color, heading, speed);
