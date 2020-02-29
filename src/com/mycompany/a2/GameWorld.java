@@ -152,13 +152,10 @@ public class GameWorld extends Observable {
 		notifyObservers();
 	}
 	
-	//Debug command to read player's cyborg state
-	public void printPlayerInfo() {
-		System.out.println("Cyborg Lives: " + remainingLives);
-		System.out.println("Elapsed Time: " + elapsedTicks);
-		System.out.println("Highest Base: " + PlayerCyborg.getPlayer().getLastBase());
-		System.out.println("Energy Level: " + PlayerCyborg.getPlayer().getEnergyLevel());
-		System.out.println("Damage Level: " + PlayerCyborg.getPlayer().getDamageLevel());
+	public void toggleSound() {
+		sound = !sound;
+		setChanged();
+		notifyObservers();
 	}
 
 	//helper function to get a random drone from the gameObject list
