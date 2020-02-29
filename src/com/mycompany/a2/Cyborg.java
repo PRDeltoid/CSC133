@@ -10,7 +10,7 @@ abstract public class Cyborg extends MovableGameObject implements ISteerable {
 	private int energyConsumptionRate;
 	private int damageLevel;
 	private int maxDamageLevel;
-	private int lastBaseReached;
+	protected int lastBaseReached;
 	protected int steeringDirection;
 	
 	public Cyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel) {

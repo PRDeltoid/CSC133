@@ -3,14 +3,34 @@ package com.mycompany.a2;
 import com.codename1.charts.util.ColorUtil;
 
 public class NonPlayerCyborg extends Cyborg {
-	
 	IStrategy currentStrategy;
+
+	public NonPlayerCyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel) {
+		super(x, y, size, color, heading, speed, maxSpeed, energyLevel, energyConsumptionRate, maxDamageLevel);
+	}
+	
+	@Override
+	public void update() {
+		//TODO Check this
+		invokeStrategy();
+		super.update();
+	}
+
 	public void setStrategy(IStrategy strat) {
 		currentStrategy = strat;
 	}
 	
 	public void invokeStrategy() {
-		currentStrategy.apply();
+		//If a strategy has been set, invoke it!
+		if(currentStrategy != null) {
+			currentStrategy.apply();
+		}
+	}
+	
+	public void switchStrategy() {
+		//Increase lastBaseReached every time we set a strat
+		lastBaseReached++;
+		//TODO
 	}
 
 	public String toString() {
@@ -22,6 +42,7 @@ public class NonPlayerCyborg extends Cyborg {
 		" maxSpeed=" + this.maximumSpeed +
 		" steeringDirection=" + this.steeringDirection +
 		" energyLevel=" + this.getEnergyLevel() +
-		" damage=" + this.getDamageLevel();
+		" damage=" + this.getDamageLevel() +
+		" strategy=" + this.currentStrategy.getStrategyName();
 	}
 }

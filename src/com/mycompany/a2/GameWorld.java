@@ -93,11 +93,19 @@ public class GameWorld extends Observable {
 		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
 		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
 		
-		/*
-		objects.add(new NonPlayerCyborg());
-		objects.add(new NonPlayerCyborg());
-		objects.add(new NonPlayerCyborg());
-		*/
+		//public NonPlayerCyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel) {
+		//3 NPCs with different strategies. Have unlimited energy and half the player's health. All other stats are identical to player.
+		NonPlayerCyborg cyborg1 = new NonPlayerCyborg(10,0,40,ColorUtil.CYAN, 0, 10, 50, 100, 0, 5);
+		NonPlayerCyborg cyborg2 = new NonPlayerCyborg(10,10,40,ColorUtil.CYAN, 0, 10, 50, 100, 0, 5);
+		NonPlayerCyborg cyborg3 = new NonPlayerCyborg(0,10,40,ColorUtil.CYAN, 0, 10, 50, 100, 0, 5);
+
+		cyborg1.setStrategy(new MoveToNextBaseStrategy(cyborg1));
+		cyborg2.setStrategy(new AttackStrategy(cyborg2));
+		cyborg3.setStrategy(new RandomMoveStrategy(cyborg3));
+
+		objects.add(cyborg1);
+		objects.add(cyborg2);
+		objects.add(cyborg3);
 		
 		//Update views
 		setChanged();
@@ -130,6 +138,7 @@ public class GameWorld extends Observable {
 				System.out.println(object.getClassName() + " is out of bounds, nudging back in");
 				nudgeInsideBoundary(object);
 			}
+			
 		}
 
 		//check if the player has died/can't move
