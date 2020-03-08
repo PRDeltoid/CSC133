@@ -176,7 +176,7 @@ abstract public class Cyborg extends MovableGameObject implements ISteerable {
 		updateSpeed();
 	}
 	
-	//Checks for death and updates the cyborg if death occurs (they lose one life)
+	//Checks for death or out-of-energy state
 	public boolean isDead() {
 		if(energyLevel == 0 || (damageLevel >= maxDamageLevel)) {
 			return true;

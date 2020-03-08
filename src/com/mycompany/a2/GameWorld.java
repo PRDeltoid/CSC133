@@ -4,17 +4,21 @@ import java.util.Observable;
 import java.util.Random;
 
 import com.codename1.charts.util.ColorUtil;
+import com.codename1.ui.Display;
 
 public class GameWorld extends Observable {
 
 	private int height; //currently "X"
 	private int width;	//currently "Y"
 	private GameObjectCollection objects = new GameObjectCollection(); //ArrayList<GameObject> objects = new ArrayList<GameObject>();
+	private GameObjectCollection npcs = new GameObjectCollection();
 	private int elapsedTicks = 0;
 	private boolean gameOver = false;
 	private int startLives = 3;
 	private int remainingLives = startLives;
 	private boolean sound = false;
+	
+	private int lastBase = 4; //The last base needed to win the game
 	
 	//helper function to make sure a given value falls within a range
 	//this is very useful if we need to make sure a given X or Y value is within our map
@@ -56,16 +60,25 @@ public class GameWorld extends Observable {
 		return sound;
 	}
 
-	public boolean isGameover() {
+	public boolean playerOutOfLivesGameover() {
 		return (remainingLives==0);
+	}
+	
+	public boolean isGameOver() {
+		return gameOver;
 	}
 
 	//Ctor
-	public GameWorld(int height, int width) {
+	public GameWorld() {
+	}
+	
+	//Overloaded version of init which also sets height and width. Used at game startup to initialize with MapView size
+	public void init(int height, int width) {
+		init();
 		this.height = height;
 		this.width = width;
 	}
-	
+
 	public void init() {
 		//Initialize map variables
 		Random rand = new Random();
@@ -94,10 +107,10 @@ public class GameWorld extends Observable {
 		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
 		
 		//public NonPlayerCyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel) {
-		//3 NPCs with different strategies. Have unlimited energy and half the player's health. All other stats are identical to player.
-		NonPlayerCyborg cyborg1 = new NonPlayerCyborg(10,0,40,ColorUtil.CYAN, 0, 10, 50, 100, 0, 5);
-		NonPlayerCyborg cyborg2 = new NonPlayerCyborg(10,10,40,ColorUtil.CYAN, 0, 10, 50, 100, 0, 5);
-		NonPlayerCyborg cyborg3 = new NonPlayerCyborg(0,10,40,ColorUtil.CYAN, 0, 10, 50, 100, 0, 5);
+		//3 NPCs with different strategies. Have unlimited energy and 150% the player's health. All other stats are identical to player.
+		NonPlayerCyborg cyborg1 = new NonPlayerCyborg(20,0,20,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
+		NonPlayerCyborg cyborg2 = new NonPlayerCyborg(20,20,20,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
+		NonPlayerCyborg cyborg3 = new NonPlayerCyborg(0,20,20,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
 
 		cyborg1.setStrategy(new MoveToNextBaseStrategy(cyborg1));
 		cyborg2.setStrategy(new AttackStrategy(cyborg2));
@@ -106,6 +119,9 @@ public class GameWorld extends Observable {
 		objects.add(cyborg1);
 		objects.add(cyborg2);
 		objects.add(cyborg3);
+		npcs.add(cyborg1);
+		npcs.add(cyborg2);
+		npcs.add(cyborg3);
 		
 		//Update views
 		setChanged();
@@ -141,28 +157,39 @@ public class GameWorld extends Observable {
 			
 		}
 
-		//check if the player has died/can't move
+		//Player death/out of energy check
 		if(PlayerCyborg.getPlayer().isDead() == true) {
 			//Lose a life
-			System.out.println("The Cyborg has failed. You lose one life. Try again!");
+			System.out.println("Your Cyborg has failed. You lose one life. Try again!");
 			remainingLives -= 1;
 			//Check for game over (no lives left)
-			if(isGameover()) {
+			if(playerOutOfLivesGameover()) {
 				System.out.println("Game Over! You have run out of lives");
 				//set the game over flag to disable further play
 				gameOver = true;
-			// otherwise reset the player
+			// otherwise reset the player and world
 			} else {
 				init();
 				PlayerCyborg.getPlayer().resetDamageLevel();
 				PlayerCyborg.getPlayer().resetEnergyLevel();
 			}
-		//Hardcoded victory check for our 4 hardcoded bases
-		} else if(PlayerCyborg.getPlayer().getLastBase() == 4) {
-			System.out.println("Game over, you win! Total time: #"+elapsedTicks);
+		//Player victory check
+		} else if(PlayerCyborg.getPlayer().getLastBase() == lastBase) {
+			System.out.println("Game over, you win! Total time: "+elapsedTicks);
 			gameOver = true;
 			
+		//NPC victory check
+		} else {
+			IIterator npcIt = npcs.getIterator();
+			while(npcIt.hasNext()) {
+				if(((NonPlayerCyborg) (npcIt.next())).getLastBase() == lastBase) {
+					System.out.println("Game over, you lose! Another cyborg reached the end before you. Total time: "+elapsedTicks);
+					gameOver = true;
+					
+				}
+			}
 		}
+
 		
 		setChanged();
 		notifyObservers();
@@ -172,6 +199,14 @@ public class GameWorld extends Observable {
 		sound = !sound;
 		setChanged();
 		notifyObservers();
+	}
+	
+	public void switchAllNPCStrategy() {
+		IIterator npcsIt = npcs.getIterator();
+		while(npcsIt.hasNext()) {
+			//TODO Should this be "setStrategy()" where GameWorld can have a "getRandomNPCStrat" function to feed it?
+			((NonPlayerCyborg) (npcsIt.next())).switchStrategy(); 
+		}
 	}
 
 	//helper function to get a random drone from the gameObject list
@@ -203,13 +238,8 @@ public class GameWorld extends Observable {
 
 	//THIS FUNCTION CAN CAUSE INFINITE LOOP IF NO NPCs EXISTS. BE CAREFUL!!!
 	public NonPlayerCyborg debugGetRandomNPC() {
-		//Randomly pick objects until we pick a energyStation
 		Random rand = new Random();
-		GameObject object = objects.get(rand.nextInt(objects.size()-1));
-		while(!(object instanceof NonPlayerCyborg)) {
-			object = objects.get(rand.nextInt(objects.size())-1);
-		}
-		//Return our random energyStation 
+		GameObject object = npcs.get(rand.nextInt(npcs.size()-1));
 		return (NonPlayerCyborg) object;
 		
 	}

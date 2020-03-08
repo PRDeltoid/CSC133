@@ -11,7 +11,6 @@ public abstract class MovableGameObject extends GameObject {
 		this.speed = speed;
 	}
 
-	//TODO: Fix this?
 	public void move() {
 		double oldX = this.location.getX();
 		double oldY = this.location.getY();
@@ -21,8 +20,6 @@ public abstract class MovableGameObject extends GameObject {
 		//Currently flooring deltas to make sure our decimal numbers arn't too long. May end up rounding to the 10s or 100s decimal place later
 		double newX = oldX+Math.floor(deltaX);
 		double newY = oldY+Math.floor(deltaY);
-		//Debug output for testing the method
-		System.out.println("Inside "+getClassName()+" move() method: Old [X,Y]=[" + oldX + "," + oldY + "], heading="+getHeading()+", New [X,Y]=["+newX+" ("+oldX+"+"+Math.floor(deltaX)+"),"+newY+" ("+oldY+"+"+Math.floor(deltaY)+")]");
 		this.location.setX((float) (oldX + Math.floor(deltaX)));
 		this.location.setY((float) (oldY + Math.floor(deltaY)));
 	}

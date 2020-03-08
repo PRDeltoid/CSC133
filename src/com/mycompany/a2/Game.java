@@ -4,8 +4,11 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.Border;
 import com.codename1.ui.Label;
+import com.codename1.ui.TextArea;
+import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.geom.Dimension;
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Button;
 import com.codename1.ui.CheckBox;
@@ -18,6 +21,11 @@ import com.codename1.ui.Form;
 import java.lang.String;
 
 public class Game extends Form {
+	
+	@Override
+	protected Dimension calcPreferredSize() {
+		return new Dimension(Display.getInstance().getDisplayHeight(), Display.getInstance().getDisplayWidth());
+	}
 	
 	private myGUI gui;
 	
@@ -33,10 +41,9 @@ public class Game extends Form {
 	private void tick() {
 		//Update the game world
 		this.world.update();
-		gameOver = world.isGameover();
+		gameOver = world.isGameOver();
 	}
 	
-	//Discrete simulation input
 	private void play() {
 		this.show();
 	}
@@ -44,13 +51,13 @@ public class Game extends Form {
 	public Game() {
 		//Create the world model
 		//TODO Make height/width equal to the MapView object in myGui
-		world = new GameWorld(1000,1000);
+		world = new GameWorld();
 		
 		//Setup the gui, attach it to the model
 		gui = new myGUI(world);
 		
 		//Setup the world
-		world.init();
+		world.init(gui.centerContainer.getHeight(), gui.centerContainer.getWidth());
 		
 		//Play the game
 		play();
@@ -149,11 +156,8 @@ public class Game extends Form {
 			//Setup buttons
 			setupButtons(world);
 
-			//Setup the GUI
-			mainContainer = new Container();
-			mainContainer.setLayout(new BorderLayout());
-
-
+			Game.this.setLayout(new BorderLayout());
+			
 			eastContainer = new Container();
 			eastContainer.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
 			eastContainer.add(brakeBtn);
@@ -177,20 +181,11 @@ public class Game extends Form {
 
 			centerContainer = new MapView(world);
 			
-			mainContainer.add(BorderLayout.CENTER, centerContainer);
-			mainContainer.add(BorderLayout.NORTH, northContainer);
-			mainContainer.add(BorderLayout.SOUTH, southContainer);
-			mainContainer.add(BorderLayout.EAST, eastContainer);
-			mainContainer.add(BorderLayout.WEST, westContainer);
-			
-			Game.this.addComponent(mainContainer);
-		
-				
-			//TODO Fix this
-			System.out.println(Display.getInstance().getDisplayWidth());
-			System.out.println(Display.getInstance().getDisplayHeight());
-			northContainer.setWidth(Display.getInstance().getDisplayWidth());
-			eastContainer.setHeight(Display.getInstance().getDisplayHeight());
+			Game.this.add(BorderLayout.CENTER, centerContainer);
+			Game.this.add(BorderLayout.NORTH, northContainer);
+			Game.this.add(BorderLayout.SOUTH, southContainer);
+			Game.this.add(BorderLayout.EAST, eastContainer);
+			Game.this.add(BorderLayout.WEST, westContainer);
 		}
 		
 	}
@@ -270,7 +265,7 @@ public class Game extends Form {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Change Strat command invoked");
-			//TODO
+			target.switchAllNPCStrategy();
 		}
 		
 	}
@@ -286,7 +281,13 @@ public class Game extends Form {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Collide NPC command invoked");
-			PlayerCyborg.getPlayer().collide(target.debugGetRandomDrone());
+			//Get player and a random NPC
+			NonPlayerCyborg npc = target.debugGetRandomNPC();
+			PlayerCyborg player = PlayerCyborg.getPlayer();
+			//They each hit each other
+			player.collide(npc);
+			npc.collide(player);
+
 		}
 		
 	}
@@ -301,8 +302,23 @@ public class Game extends Form {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//TODO
 			System.out.println("Collide Base command invoked");
+			Command cOk = new Command("Ok");
+			Command cCancel = new Command("Cancel");
+			Command[] cmds = new Command[]{cOk, cCancel};
+			TextField baseNumber = new TextField();
+			Command c = Dialog.show("Enter base number:", baseNumber, cmds);
+			//[if you only want to display the okay option, you do not need to
+			//create cmds, just use Dialog.show("Enter the title:", myTF, cOk);]
+			if (c == cOk) {
+				try {
+					int baseInt = Integer.parseInt(baseNumber.getText());
+					System.out.println("Base " + Integer.parseInt(baseNumber.getText()));
+					PlayerCyborg.getPlayer().setLastBase(baseInt);
+				} catch(NumberFormatException exp) {
+					System.out.println("Invalid number entered");
+				}
+			}
 		}
 		
 	}
@@ -365,7 +381,7 @@ public class Game extends Form {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Help command invoked");
 			//TODO fix this
-			Dialog.show("Help", "TODO", "OK", null);
+			Dialog.show("Help", "a - accelerate\nb - brake\nl - turn left\nr - turn right\ne - collide with energy station\ng - collide with a drone\nt - tick", "OK", null);
 		}
 		
 	}
