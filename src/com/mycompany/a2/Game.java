@@ -45,7 +45,11 @@ public class Game extends Form {
 	}
 	
 	private void play() {
+		//show() must be called before the MapView will have a size to provide to the GameWorld
 		this.show();
+
+		//Setup the world
+		world.init(gui.centerContainer.getHeight(), gui.centerContainer.getWidth());
 	}
 	
 	public Game() {
@@ -55,9 +59,6 @@ public class Game extends Form {
 		
 		//Setup the gui, attach it to the model
 		gui = new myGUI(world);
-		
-		//Setup the world
-		world.init(gui.centerContainer.getHeight(), gui.centerContainer.getWidth());
 		
 		//Play the game
 		play();
@@ -395,7 +396,7 @@ public class Game extends Form {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("About command invoked");
-			Dialog.show("About", "Taylor Britton - CSC 137 \n Assignment 2 \n Spring 2020", "OK", null);
+			Dialog.show("About", "Taylor Britton - CSC 133 \n Assignment 2 \n Spring 2020", "OK", null);
 		}
 		
 	}

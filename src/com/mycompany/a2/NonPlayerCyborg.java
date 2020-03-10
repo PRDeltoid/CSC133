@@ -1,5 +1,7 @@
 package com.mycompany.a2;
 
+import java.util.Random;
+
 import com.codename1.charts.util.ColorUtil;
 
 public class NonPlayerCyborg extends Cyborg {
@@ -27,9 +29,21 @@ public class NonPlayerCyborg extends Cyborg {
 		}
 	}
 	
-	public void switchStrategy() {
+	public void switchStrategy(GameWorld world) {
 		//Increase lastBaseReached every time we set a strat
 		lastBaseReached++;
+		Random rand = new Random();
+		switch(rand.nextInt(3)) {
+		case(0):
+			currentStrategy = new MoveToNextBaseStrategy(this, world);
+			break;
+		case(1):
+			currentStrategy = new AttackStrategy(this);
+			break;
+		case(2):
+			currentStrategy = new RandomMoveStrategy(this, world);
+			break;
+		}
 		//TODO
 	}
 

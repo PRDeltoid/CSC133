@@ -47,6 +47,14 @@ public class GameWorld extends Observable {
 	private void nudgeInsideBoundary(GameObject object) {
 		object.setLocation(clamp(object.getLocation().getX(),0,height), clamp(object.getLocation().getY(),0,width));
 	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
 
 	public int getElapsedTicks() {
 		return elapsedTicks;
@@ -74,9 +82,9 @@ public class GameWorld extends Observable {
 	
 	//Overloaded version of init which also sets height and width. Used at game startup to initialize with MapView size
 	public void init(int height, int width) {
-		init();
 		this.height = height;
 		this.width = width;
+		init();
 	}
 
 	public void init() {
@@ -112,9 +120,9 @@ public class GameWorld extends Observable {
 		NonPlayerCyborg cyborg2 = new NonPlayerCyborg(20,20,20,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
 		NonPlayerCyborg cyborg3 = new NonPlayerCyborg(0,20,20,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
 
-		cyborg1.setStrategy(new MoveToNextBaseStrategy(cyborg1));
+		cyborg1.setStrategy(new MoveToNextBaseStrategy(cyborg1, this));
 		cyborg2.setStrategy(new AttackStrategy(cyborg2));
-		cyborg3.setStrategy(new RandomMoveStrategy(cyborg3));
+		cyborg3.setStrategy(new RandomMoveStrategy(cyborg3, this));
 
 		objects.add(cyborg1);
 		objects.add(cyborg2);
@@ -205,8 +213,21 @@ public class GameWorld extends Observable {
 		IIterator npcsIt = npcs.getIterator();
 		while(npcsIt.hasNext()) {
 			//TODO Should this be "setStrategy()" where GameWorld can have a "getRandomNPCStrat" function to feed it?
-			((NonPlayerCyborg) (npcsIt.next())).switchStrategy(); 
+			((NonPlayerCyborg) (npcsIt.next())).switchStrategy(this); 
 		}
+	}
+
+	public Base getBase(int index) {
+		IIterator it = objects.getIterator();
+		while(it.hasNext()) {
+			Object object = it.next();
+			if(object instanceof Base && ((Base) object).getSequenceNumber() == index) {
+				return ((Base) object);
+			}
+		}
+		
+		return null;
+		
 	}
 
 	//helper function to get a random drone from the gameObject list
