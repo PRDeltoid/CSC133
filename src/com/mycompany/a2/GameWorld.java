@@ -212,7 +212,6 @@ public class GameWorld extends Observable {
 	public void switchAllNPCStrategy() {
 		IIterator npcsIt = npcs.getIterator();
 		while(npcsIt.hasNext()) {
-			//TODO Should this be "setStrategy()" where GameWorld can have a "getRandomNPCStrat" function to feed it?
 			((NonPlayerCyborg) (npcsIt.next())).switchStrategy(this); 
 		}
 	}

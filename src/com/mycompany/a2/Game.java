@@ -90,7 +90,7 @@ public class Game extends Form {
 			AccelerateCommand accelerateCommand = new AccelerateCommand();
 			LeftCommand leftCommand = new LeftCommand();
 			TickCommand tickCommand = new TickCommand();
-			ChangeStratCommand changeStratCommand = new ChangeStratCommand();
+			ChangeStratCommand changeStratCommand = new ChangeStratCommand(world);
 			CollideNPCCommand collideNPCCommand = new CollideNPCCommand(world);
 			CollideBaseCommand collideBaseCommand = new CollideBaseCommand(world);
 			CollideEnergyStationCommand collideEnergyStationCommand = new CollideEnergyStationCommand(world);
@@ -259,8 +259,9 @@ public class Game extends Form {
 	private class ChangeStratCommand extends Command {
 		GameWorld target;
 		
-		public ChangeStratCommand() {
+		public ChangeStratCommand(GameWorld target) {
 			super("ChangeStrat");
+			this.target = target;
 		}
 		
 		@Override
