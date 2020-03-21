@@ -65,7 +65,6 @@ public class Game extends Form {
 	}
 	
 	private class myGUI {
-		Container mainContainer;
 		Container centerContainer;
 		Container eastContainer;
 		Container westContainer;

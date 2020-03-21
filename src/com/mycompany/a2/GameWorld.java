@@ -249,7 +249,7 @@ public class GameWorld extends Observable {
 		Random rand = new Random();
 		GameObject object = objects.get(rand.nextInt(objects.size()-1));
 		while(!(object instanceof EnergyStation)) {
-			object = objects.get(rand.nextInt(objects.size())-1);
+			object = objects.get(rand.nextInt(objects.size()-1));
 		}
 		//Return our random energyStation 
 		return (EnergyStation) object;
