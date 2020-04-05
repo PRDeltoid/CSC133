@@ -1,4 +1,4 @@
-package com.mycompany.a2;
+package com.mycompany.a3;
 
 import java.util.Observable;
 import java.util.Random;
@@ -66,6 +66,10 @@ public class GameWorld extends Observable {
 	
 	public boolean getSound() {
 		return sound;
+	}
+	
+	public GameObjectCollection getObjects() {
+		return objects;
 	}
 
 	public boolean playerOutOfLivesGameover() {

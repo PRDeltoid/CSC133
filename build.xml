@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--build_version=4.3--> 
 
-<project name="A2Prj" basedir=".">
+<project name="A3Prj" basedir=".">
 	<description>Builds, tests, and runs the project CodenameOne111.</description>
 	<property file="codenameone_settings.properties" />
 	<property file="build.props" />

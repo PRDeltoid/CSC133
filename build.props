@@ -3,7 +3,7 @@ build.classes.dir=${build.dir}/
 build.dir=bin
 # Only compile against the classpath explicitly listed here:
 dist.dir=dist
-dist.jar=${dist.dir}/A2Prj.jar
+dist.jar=${dist.dir}/A3Prj.jar
 build.test.classes.dir=${build.dir}/test/classes
 build.test.results.dir=${build.dir}/test/results
 test.src.dir=test

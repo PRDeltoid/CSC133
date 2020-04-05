@@ -1,8 +1,10 @@
-package com.mycompany.a2;
+package com.mycompany.a3;
 
 import com.codename1.charts.models.Point;
+import com.codename1.ui.Graphics;
+import com.codename1.ui.geom.Shape;
 
-abstract public class GameObject extends Object {
+abstract public class GameObject extends Object implements IDrawable {
 	Point location = new Point();
 	int size;
 	int color;

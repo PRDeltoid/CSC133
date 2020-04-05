@@ -1,8 +1,10 @@
-package com.mycompany.a2;
+package com.mycompany.a3;
 
 import java.util.Random;
 
+import com.codename1.charts.models.Point;
 import com.codename1.charts.util.ColorUtil;
+import com.codename1.ui.Graphics;
 
 public class NonPlayerCyborg extends Cyborg {
 	IStrategy currentStrategy;
@@ -58,5 +60,18 @@ public class NonPlayerCyborg extends Cyborg {
 		" energyLevel=" + this.getEnergyLevel() +
 		" damage=" + this.getDamageLevel() +
 		" strategy=" + this.currentStrategy.getStrategyName();
+	}
+	
+	public void draw(Graphics g, Point p) {
+		Point drawAt = new Point();
+		//Get the upper-left corner relative to our center
+		drawAt.setX(getLocation().getX() - getSize()/2);
+		drawAt.setY(getLocation().getY() - getSize()/2);
+		
+
+		//Draw our shape
+		g.setColor(getColor());
+		//TODO: Make circle
+		g.drawRect((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size, size);
 	}
 }
