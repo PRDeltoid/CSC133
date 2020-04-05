@@ -41,13 +41,24 @@ public class Drone extends MovableGameObject {
 	public String getClassName() {
 		return "Drone";
 	}
+
 	public void draw(Graphics g, Point p) {
 		Point drawAt = new Point();
+		
+		//Get our map-local coordinates
 		drawAt.setX(getLocation().getX() - getSize()/2);
 		drawAt.setY(getLocation().getY() - getSize()/2);
 		
 
+		//Get the absolute top-left coordinate of the entity
+		int baseX = (int)(p.getX()+drawAt.getX());
+		int baseY = (int)(p.getY()+drawAt.getY());
 		g.setColor(getColor());
-		g.fillRect((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size, size);
+		//Get the points of our triangle
+		int[] xPoints = {baseX, baseX+size, baseX+(size/2)};
+		int[] yPoints = {baseY, baseY, baseY+size};
+		int nPoints = 3;
+
+		g.drawPolygon(xPoints, yPoints, nPoints);
 	}
 }

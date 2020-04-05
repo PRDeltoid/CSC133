@@ -33,6 +33,7 @@ public class Game extends Form implements Runnable {
 	private GameWorld world;
 	//Flag to prevent further execution after game over 
 	private boolean gameOver = false;
+	private boolean paused = false;
 
 	//Flag for managing if the player has indicated they want to exit the game
 	//This makes the Y and N entries available for use
@@ -43,9 +44,11 @@ public class Game extends Form implements Runnable {
 	
 	//Function that runs every time the game timer elapses
 	public void run() {
-		//Update the game world
-		this.world.update();
-		gameOver = world.isGameOver();
+		if(!paused) {
+			//Update the game world
+			this.world.update();
+			gameOver = world.isGameOver();
+		}
 	}
 
 	private void play() {
@@ -65,8 +68,9 @@ public class Game extends Form implements Runnable {
 		gui = new myGUI(world);
 		
 		//Setup the timer and start it to run at 20ms intervals
+		//TODO: Set back to 20ms
 		timer = new UITimer(this);
-		timer.schedule(20, true, this);
+		timer.schedule(200, true, this);
 		
 		//Play the game
 		play();
@@ -85,23 +89,19 @@ public class Game extends Form implements Runnable {
 		Button accelerateBtn;
 		Button leftBtn;
 		Button changeStratBtn;
-		Button collideNPCBtn;
-		Button collideBaseBtn;
-		Button collideEnergyStationBtn;
-		Button collideDroneBtn;
-		Button tickBtn;
+		Button togglePlayBtn;
+		
+		private Game getOuter() {
+			return Game.this;
+		}
 
 		private void setupButtons(GameWorld world) {
 			BrakeCommand brakeCommand = new BrakeCommand();
 			RightCommand rightCommand = new RightCommand();
 			AccelerateCommand accelerateCommand = new AccelerateCommand();
 			LeftCommand leftCommand = new LeftCommand();
-			TickCommand tickCommand = new TickCommand();
 			ChangeStratCommand changeStratCommand = new ChangeStratCommand(world);
-			CollideNPCCommand collideNPCCommand = new CollideNPCCommand(world);
-			CollideBaseCommand collideBaseCommand = new CollideBaseCommand(world);
-			CollideEnergyStationCommand collideEnergyStationCommand = new CollideEnergyStationCommand(world);
-			CollideDroneCommand collideDroneCommand = new CollideDroneCommand(world);
+			TogglePlayCommand playCommand = new TogglePlayCommand(getOuter());
 			
 			 brakeBtn = new MyButton("Break");
 			 brakeBtn.setCommand(brakeCommand);
@@ -123,26 +123,17 @@ public class Game extends Form implements Runnable {
 			 changeStratBtn = new MyButton("Change Strat");
 			 changeStratBtn.setCommand(changeStratCommand);
 			 
-			 collideNPCBtn = new MyButton("Collide NPC");
-			 collideNPCBtn.setCommand(collideNPCCommand);
-
-			 collideBaseBtn = new MyButton("Collide Base");
-			 collideBaseBtn.setCommand(collideBaseCommand);
-
-			 collideEnergyStationBtn = new MyButton("Collide EnergyStation");
-			 collideEnergyStationBtn.setCommand(collideEnergyStationCommand);
-			 addKeyListener('e', collideEnergyStationCommand);
-
-			 collideDroneBtn = new MyButton("Collide Drone");
-			 collideDroneBtn.setCommand(collideDroneCommand);
-			 addKeyListener('g', collideDroneCommand);
-
-			 tickBtn = new MyButton("Tick");
-			 tickBtn.setCommand(tickCommand);
-			 addKeyListener('t', tickCommand);
-			
+			 togglePlayBtn = new MyButton("Pause");
+			 togglePlayBtn.setCommand(playCommand);
+			 togglePlayBtn.addActionListener((e) -> {
+					 if(getOuter().paused) {
+						 togglePlayBtn.setText("Play");
+					 } else {
+						 togglePlayBtn.setText("Pause");
+					 }
+			 });
 		}
-		
+
 		public myGUI(GameWorld world) {
 			
 
@@ -181,11 +172,7 @@ public class Game extends Form implements Runnable {
 			
 			southContainer = new Container();
 			southContainer.setLayout(new FlowLayout(Component.CENTER));
-			southContainer.add(collideNPCBtn);
-			southContainer.add(collideBaseBtn);
-			southContainer.add(collideEnergyStationBtn);
-			southContainer.add(collideDroneBtn);
-			southContainer.add(tickBtn);
+			southContainer.add(togglePlayBtn);
 
 			centerContainer = new MapView(world);
 			
@@ -250,19 +237,6 @@ public class Game extends Form implements Runnable {
 		
 	}
 
-	private class TickCommand extends Command {
-		public TickCommand() {
-			super("Tick");
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("Tick command invoked");
-			run();
-		}
-		
-	}
-	
 	private class ChangeStratCommand extends Command {
 		GameWorld target;
 		
@@ -279,89 +253,18 @@ public class Game extends Form implements Runnable {
 		
 	}
 	
-	private class CollideNPCCommand extends Command {
-		GameWorld target;
+	private class TogglePlayCommand extends Command {
 		
-		public CollideNPCCommand(GameWorld target) {
-			super("CollideNPC");
-			this.target = target;
+		Game target;
+		public TogglePlayCommand(Game game) {
+			super("Play");
+			this.target = game;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Collide NPC command invoked");
-			//Get player and a random NPC
-			NonPlayerCyborg npc = target.debugGetRandomNPC();
-			PlayerCyborg player = PlayerCyborg.getPlayer();
-			//They each hit each other
-			player.collide(npc);
-			npc.collide(player);
-
+			target.paused = !(target.paused);
 		}
-		
-	}
-
-	private class CollideBaseCommand extends Command {
-		GameWorld target;
-		
-		public CollideBaseCommand(GameWorld target) {
-			super("CollideBase");
-			this.target = target;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("Collide Base command invoked");
-			Command cOk = new Command("Ok");
-			Command cCancel = new Command("Cancel");
-			Command[] cmds = new Command[]{cOk, cCancel};
-			TextField baseNumber = new TextField();
-			Command c = Dialog.show("Enter base number:", baseNumber, cmds);
-			//[if you only want to display the okay option, you do not need to
-			//create cmds, just use Dialog.show("Enter the title:", myTF, cOk);]
-			if (c == cOk) {
-				try {
-					int baseInt = Integer.parseInt(baseNumber.getText());
-					System.out.println("Base " + Integer.parseInt(baseNumber.getText()));
-					PlayerCyborg.getPlayer().setLastBase(baseInt);
-				} catch(NumberFormatException exp) {
-					System.out.println("Invalid number entered");
-				}
-			}
-		}
-		
-	}
-
-	private class CollideEnergyStationCommand extends Command {
-		GameWorld target;
-		
-		public CollideEnergyStationCommand(GameWorld target) {
-			super("CollideEnergyStation");
-			this.target = target;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("Collide Energy Station command invoked");
-			PlayerCyborg.getPlayer().collide(world.debugGetRandomEnergyStation());
-		}
-		
-	}
-
-	private class CollideDroneCommand extends Command {
-		GameWorld target;
-		
-		public CollideDroneCommand(GameWorld target) {
-			super("CollideDrone");
-			this.target = target;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("Collide Drone command invoked");
-			PlayerCyborg.getPlayer().collide(world.debugGetRandomDrone());
-		}
-		
 	}
 
 	private class ExitCommand extends Command {
@@ -434,6 +337,9 @@ public class Game extends Form implements Runnable {
 			this.getAllStyles().setBgTransparency(255);
 
 			this.getUnselectedStyle().setBgColor(ColorUtil.GREEN);
+			
+			this.getDisabledStyle().setBgColor(ColorUtil.GRAY);
+			this.getDisabledStyle().setBorder(Border.createLineBorder(3, ColorUtil.LTGRAY));
 			
 			this.getPressedStyle().setBgColor(ColorUtil.BLUE);
 		}

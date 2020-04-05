@@ -14,7 +14,7 @@ public class PlayerCyborg extends Cyborg {
 	//Singleton 
 	public static PlayerCyborg getPlayer() {
 		if (player == null) {
-			player = new PlayerCyborg(0,0,20,ColorUtil.MAGENTA,0,10,50,100,5,10);
+			player = new PlayerCyborg(0,0,20,ColorUtil.MAGENTA,0,1,50,100,5,10);
 		}
 		return player;
 	}

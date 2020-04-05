@@ -39,7 +39,16 @@ public class Base extends FixedGameObject {
 		
 
 		g.setColor(getColor());
-		g.fillRect((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size, size);
+
+		//Get the absolute top-left coordinate of the entity
+		int baseX = (int)(p.getX()+drawAt.getX());
+		int baseY = (int)(p.getY()+drawAt.getY());
+		//Get the points of our triangle
+		int[] xPoints = {baseX, baseX+size, baseX+(size/2)};
+		int[] yPoints = {baseY, baseY, baseY+size};
+		int nPoints = 3;
+
+		g.fillPolygon(xPoints, yPoints, nPoints);
 	}
 	
 }

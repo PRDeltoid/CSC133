@@ -115,14 +115,14 @@ public class GameWorld extends Observable {
 		
 		//Drone(float x, float y, int size, int color, int heading, int speed) {
 		//2 drones with random location, fixed size, and random speed (5-10) and heading (0-359)
-		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 20, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
-		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 20, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
+		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 20, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(4)+1));
+		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 20, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(4)+1));
 		
 		//public NonPlayerCyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel) {
 		//3 NPCs with different strategies. Have unlimited energy and 150% the player's health. All other stats are identical to player.
-		NonPlayerCyborg cyborg1 = new NonPlayerCyborg(50,0,50,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
-		NonPlayerCyborg cyborg2 = new NonPlayerCyborg(50,50,50,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
-		NonPlayerCyborg cyborg3 = new NonPlayerCyborg(0,50,50,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
+		NonPlayerCyborg cyborg1 = new NonPlayerCyborg(50,0,50,ColorUtil.CYAN, 0, 1, 50, 100, 0, 15);
+		NonPlayerCyborg cyborg2 = new NonPlayerCyborg(50,50,50,ColorUtil.CYAN, 0, 1, 50, 100, 0, 15);
+		NonPlayerCyborg cyborg3 = new NonPlayerCyborg(0,50,50,ColorUtil.CYAN, 0, 1, 50, 100, 0, 15);
 
 		cyborg1.setStrategy(new MoveToNextBaseStrategy(cyborg1, this));
 		cyborg2.setStrategy(new AttackStrategy(cyborg2));
@@ -230,41 +230,6 @@ public class GameWorld extends Observable {
 		}
 		
 		return null;
-		
-	}
-
-	//helper function to get a random drone from the gameObject list
-	//THIS FUNCTION CAN CAUSE INFINITE LOOP IF NO DRONE EXISTS. BE CAREFUL!!!
-	public Drone debugGetRandomDrone() {
-		//Randomly pick objects until we pick a drone
-		Random rand = new Random();
-		GameObject object = objects.get(rand.nextInt(objects.size()-1));
-		while(!(object instanceof Drone)) {
-			object = objects.get(rand.nextInt(objects.size()-1));
-		}
-		//Return our random drone
-		return (Drone) object;
-		
-	}
-	
-	//THIS FUNCTION CAN CAUSE INFINITE LOOP IF NO ENERGYSTATIONS EXISTS. BE CAREFUL!!!
-	public EnergyStation debugGetRandomEnergyStation() {
-		//Randomly pick objects until we pick a energyStation
-		Random rand = new Random();
-		GameObject object = objects.get(rand.nextInt(objects.size()-1));
-		while(!(object instanceof EnergyStation)) {
-			object = objects.get(rand.nextInt(objects.size()-1));
-		}
-		//Return our random energyStation 
-		return (EnergyStation) object;
-		
-	}
-
-	//THIS FUNCTION CAN CAUSE INFINITE LOOP IF NO NPCs EXISTS. BE CAREFUL!!!
-	public NonPlayerCyborg debugGetRandomNPC() {
-		Random rand = new Random();
-		GameObject object = npcs.get(rand.nextInt(npcs.size()-1));
-		return (NonPlayerCyborg) object;
 		
 	}
 }

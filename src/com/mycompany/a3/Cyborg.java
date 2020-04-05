@@ -29,7 +29,7 @@ abstract public class Cyborg extends MovableGameObject implements ISteerable {
 	//Default ctor
 	public Cyborg() {
 		super(0, 0, 10, ColorUtil.BLUE, 0, 0);
-		this.maximumSpeed = 50;
+		this.maximumSpeed = 10;
 		this.energyLevel = 100;
 		this.energyConsumptionRate = 5;
 		this.maxDamageLevel = 10;
