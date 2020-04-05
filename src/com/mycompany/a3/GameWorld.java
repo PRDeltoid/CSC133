@@ -17,10 +17,14 @@ public class GameWorld extends Observable {
 	private int startLives = 3;
 	private int remainingLives = startLives;
 	private boolean sound = false;
+	private Sound cyborgCrashSound;
+	private Sound energystationCollideSound;
+	private Sound lifeLostSound;
+	private BGSound backgroundSound;
 	
 	private int lastBase = 4; //The last base needed to win the game
 	
-	//helper function to make sure a given value falls within a range
+	/*helper function to make sure a given value falls within a range
 	//this is very useful if we need to make sure a given X or Y value is within our map
 	//if the X or Y value is outside of our clamp, we make it the maximum or minimum value (depending on if it is under or over our clamp values respectively)
 	static private float clamp(float value, float max, float min) {
@@ -46,7 +50,7 @@ public class GameWorld extends Observable {
 	//Nudges an object back into the game world
 	private void nudgeInsideBoundary(GameObject object) {
 		object.setLocation(clamp(object.getLocation().getX(),0,height), clamp(object.getLocation().getY(),0,width));
-	}
+	}*/
 	
 	public int getHeight() {
 		return height;
@@ -64,7 +68,7 @@ public class GameWorld extends Observable {
 		return remainingLives;
 	}
 	
-	public boolean getSound() {
+	public boolean getSoundSetting() {
 		return sound;
 	}
 	
@@ -135,6 +139,11 @@ public class GameWorld extends Observable {
 		npcs.add(cyborg2);
 		npcs.add(cyborg3);
 		
+		//Load our sounds
+		createSounds();
+		//Start the background music
+		backgroundSound.start();
+		
 		//Update views
 		setChanged();
 		notifyObservers();
@@ -148,6 +157,13 @@ public class GameWorld extends Observable {
 		}
 	}
 	
+	public void createSounds() {
+		cyborgCrashSound = new Sound("cyborg-collide.mp3", this); //TODO: Change to wav
+		energystationCollideSound = new Sound("energystation-collide.wav", this);
+		lifeLostSound = new Sound("life-loss.wav", this);
+		backgroundSound = new BGSound("bg-sound.wav");
+	}
+	
 	//Update function is called whenever we want to update the map/game objects' state (ie. every game tick)
 	public void update() {
 		this.elapsedTicks += 1;
@@ -159,14 +175,9 @@ public class GameWorld extends Observable {
 		//Iterate through every game object and apply relevant updates to it
 		while(objects.hasNext()) {
 			GameObject object = (GameObject) objects.next();
-			object.update();
-			//Kind of hacky bounds checking. I can't figure out how to get boundary information inside a movable object (and thus, accessible to the move() method)
-			//If an object is movable and is not inside the boundary, move it back in
-			if(isOutOfBounds(object)) {
-				System.out.println(object.getClassName() + " is out of bounds, nudging back in");
-				nudgeInsideBoundary(object);
-			}
-			
+			//Passing in 20ms update time hardcoded right now
+			//TODO: Make this dynamic based on timer
+			object.update(20, this);
 		}
 
 		//Player death/out of energy check
@@ -174,6 +185,9 @@ public class GameWorld extends Observable {
 			//Lose a life
 			System.out.println("Your Cyborg has failed. You lose one life. Try again!");
 			remainingLives -= 1;
+			//Play the life lost sound
+			lifeLostSound.play();
+
 			//Check for game over (no lives left)
 			if(playerOutOfLivesGameover()) {
 				System.out.println("Game Over! You have run out of lives");
@@ -209,6 +223,14 @@ public class GameWorld extends Observable {
 	
 	public void toggleSound() {
 		sound = !sound;
+		
+		//Toggle our background music too
+		if(backgroundSound.isPlaying()) {
+			backgroundSound.stop();
+		} else {
+			backgroundSound.start();
+		}
+
 		setChanged();
 		notifyObservers();
 	}

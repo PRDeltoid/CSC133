@@ -33,8 +33,8 @@ public class Drone extends MovableGameObject {
 		this.setHeading(this.getHeading() + headingAdjustment);
 	}
 
-	public void update() {
-		move(20);
+	public void update(int elapsedTime, GameWorld world) {
+		move(elapsedTime, world.getWidth(), world.getHeight());
 		updateHeading();
 	}
 

@@ -27,7 +27,7 @@ public class EnergyStation extends FixedGameObject {
 		" capacity=" + this.capacity;
 	}
 	
-	public void update() {}
+	public void update(int elapsedTime, GameWorld world) {}
 	
 	//Drain the energy capacity of the EnergyStation
 	public void emptyCapacity() {

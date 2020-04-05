@@ -14,10 +14,10 @@ public class NonPlayerCyborg extends Cyborg {
 	}
 	
 	@Override
-	public void update() {
+	public void update(int elapsedTime, GameWorld world) {
 		//TODO Check this
 		invokeStrategy();
-		super.update();
+		super.update(elapsedTime, world);
 	}
 
 	public void setStrategy(IStrategy strat) {

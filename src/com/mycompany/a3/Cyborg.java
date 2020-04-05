@@ -168,9 +168,9 @@ abstract public class Cyborg extends MovableGameObject implements ISteerable {
 		
 	}
 	
-	public void update() {
+	public void update(int elapsedTime, GameWorld world) {
 		//per the documentation, the cyborg moves THEN updates heading THEN updates its energy level
-		move(20);
+		move(elapsedTime, world.getWidth(), world.getHeight());
 		updateHeading();
 		updateEnergyLevel();
 		updateSpeed();

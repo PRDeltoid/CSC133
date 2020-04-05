@@ -46,7 +46,7 @@ abstract public class GameObject extends Object implements IDrawable {
 	public abstract String toString();
 
 	//Every object must have an update method, called whenever the game ticks
-	abstract void update();
+	abstract void update(int elapsedTime, GameWorld world);
 	
 	abstract String getClassName();
 

@@ -26,7 +26,7 @@ public class Base extends FixedGameObject {
 		" seqNum=" + this.sequenceNumber;
 	}
 
-	public void update() {}
+	public void update(int elapsedTime, GameWorld world) {}
 
 	public String getClassName() {
 		return "Base " + this.getSequenceNumber();
