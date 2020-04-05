@@ -45,6 +45,6 @@ public class EnergyStation extends FixedGameObject {
 
 		g.setColor(getColor());
 		//TODO: Make circle
-		g.fillArc((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size, size, 0, 360);
+		g.fillArc((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size/2, size/2, 0, 360);
 	}
 }

@@ -99,30 +99,30 @@ public class GameWorld extends Observable {
 		objects.clear();
 		objects.add(PlayerCyborg.getPlayer());
 		//Move player back to "start". Currently hardcoded at 0,0 (with Base 1, seen below)
-		PlayerCyborg.getPlayer().setLocation(0, 0);
+		PlayerCyborg.getPlayer().setLocation(100, 100);
 
 		//Add our bases
 		//4 bases, random location, blue color, sequenced in order
 		objects.add(new Base(0,0,10,ColorUtil.BLUE,1));
-		objects.add(new Base(rand.nextInt(height), rand.nextInt(width),10,ColorUtil.BLUE,2));
-		objects.add(new Base(rand.nextInt(height), rand.nextInt(width),10,ColorUtil.BLUE,3));
-		objects.add(new Base(rand.nextInt(height), rand.nextInt(width),10,ColorUtil.BLUE,4));
+		objects.add(new Base(rand.nextInt(height), rand.nextInt(width),30,ColorUtil.BLUE,2));
+		objects.add(new Base(rand.nextInt(height), rand.nextInt(width),30,ColorUtil.BLUE,3));
+		objects.add(new Base(rand.nextInt(height), rand.nextInt(width),30,ColorUtil.BLUE,4));
 
 		//EnergyStation(float x, float y, int size, int color) {
 		//2 energy stations with random location and size (1-50) (and thus, random capacity)
-		objects.add(new EnergyStation(rand.nextInt(height), rand.nextInt(width), rand.nextInt(49)+1, ColorUtil.GREEN));
-		objects.add(new EnergyStation(rand.nextInt(height), rand.nextInt(width), rand.nextInt(49)+1, ColorUtil.GREEN));
+		objects.add(new EnergyStation(rand.nextInt(height), rand.nextInt(width), rand.nextInt(69)+1, ColorUtil.GREEN));
+		objects.add(new EnergyStation(rand.nextInt(height), rand.nextInt(width), rand.nextInt(69)+1, ColorUtil.GREEN));
 		
 		//Drone(float x, float y, int size, int color, int heading, int speed) {
 		//2 drones with random location, fixed size, and random speed (5-10) and heading (0-359)
-		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
-		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 10, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
+		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 20, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
+		objects.add(new Drone(rand.nextInt(height), rand.nextInt(width), 20, ColorUtil.YELLOW, rand.nextInt(360), rand.nextInt(5) + 5));
 		
 		//public NonPlayerCyborg(float x, float y, int size, int color, int heading, int speed, int maxSpeed, int energyLevel, int energyConsumptionRate, int maxDamageLevel) {
 		//3 NPCs with different strategies. Have unlimited energy and 150% the player's health. All other stats are identical to player.
-		NonPlayerCyborg cyborg1 = new NonPlayerCyborg(20,0,20,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
-		NonPlayerCyborg cyborg2 = new NonPlayerCyborg(20,20,20,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
-		NonPlayerCyborg cyborg3 = new NonPlayerCyborg(0,20,20,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
+		NonPlayerCyborg cyborg1 = new NonPlayerCyborg(50,0,50,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
+		NonPlayerCyborg cyborg2 = new NonPlayerCyborg(50,50,50,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
+		NonPlayerCyborg cyborg3 = new NonPlayerCyborg(0,50,50,ColorUtil.CYAN, 0, 10, 50, 100, 0, 15);
 
 		cyborg1.setStrategy(new MoveToNextBaseStrategy(cyborg1, this));
 		cyborg2.setStrategy(new AttackStrategy(cyborg2));

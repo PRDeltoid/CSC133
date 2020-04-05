@@ -11,12 +11,12 @@ public abstract class MovableGameObject extends GameObject {
 		this.speed = speed;
 	}
 
-	public void move() {
+	public void move(int elapsedTime) {
 		double oldX = this.location.getX();
 		double oldY = this.location.getY();
 		double heading = Math.toRadians(90 - getHeading());
-		double deltaX = Math.cos(heading)*getSpeed();
-		double deltaY = Math.sin(heading)*getSpeed();
+		double deltaX = Math.cos(heading)*getSpeed()*elapsedTime;
+		double deltaY = Math.sin(heading)*getSpeed()*elapsedTime;
 		//Currently flooring deltas to make sure our decimal numbers arn't too long. May end up rounding to the 10s or 100s decimal place later
 		double newX = oldX+Math.floor(deltaX);
 		double newY = oldY+Math.floor(deltaY);

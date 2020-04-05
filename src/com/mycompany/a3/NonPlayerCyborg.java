@@ -72,6 +72,6 @@ public class NonPlayerCyborg extends Cyborg {
 		//Draw our shape
 		g.setColor(getColor());
 		//TODO: Make circle
-		g.drawRect((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size, size);
+		g.drawRect((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size, size, 5);
 	}
 }

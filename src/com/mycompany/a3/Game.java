@@ -3,6 +3,7 @@ import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.plaf.Border;
+import com.codename1.ui.util.UITimer;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.TextField;
@@ -20,7 +21,7 @@ import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import java.lang.String;
 
-public class Game extends Form {
+public class Game extends Form implements Runnable {
 	
 	@Override
 	protected Dimension calcPreferredSize() {
@@ -37,13 +38,16 @@ public class Game extends Form {
 	//This makes the Y and N entries available for use
 	private boolean wantsToExit = false;
 	
-	//Progress the game world 1 tick
-	private void tick() {
+	//Game timer for animation
+	private UITimer timer;
+	
+	//Function that runs every time the game timer elapses
+	public void run() {
 		//Update the game world
 		this.world.update();
 		gameOver = world.isGameOver();
 	}
-	
+
 	private void play() {
 		//show() must be called before the MapView will have a size to provide to the GameWorld
 		this.show();
@@ -59,6 +63,10 @@ public class Game extends Form {
 		
 		//Setup the gui, attach it to the model
 		gui = new myGUI(world);
+		
+		//Setup the timer and start it to run at 20ms intervals
+		timer = new UITimer(this);
+		timer.schedule(20, true, this);
 		
 		//Play the game
 		play();
@@ -250,7 +258,7 @@ public class Game extends Form {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Tick command invoked");
-			tick();
+			run();
 		}
 		
 	}
