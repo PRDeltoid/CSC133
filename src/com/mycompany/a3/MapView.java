@@ -49,7 +49,8 @@ public class MapView extends Container implements Observer {
 			//Draw the object
 			//We pass in this objects X/Y so the drawing object can use it as an offset 
 			//(since our object's x/y are relative to the Map, but our draw takes screen coordinates)
-			((GameObject)objects.next()).draw(g, new Point(this.getX(), this.getY()));;
+			GameObject object = (GameObject)objects.next();
+			object.draw(g, new Point(this.getX(), this.getY()));;
 		}
 	}
 }

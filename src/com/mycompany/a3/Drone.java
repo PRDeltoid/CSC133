@@ -50,15 +50,28 @@ public class Drone extends MovableGameObject {
 		drawAt.setY(getLocation().getY() - getSize()/2);
 		
 
-		//Get the absolute top-left coordinate of the entity
-		int baseX = (int)(p.getX()+drawAt.getX());
-		int baseY = (int)(p.getY()+drawAt.getY());
+		
 		g.setColor(getColor());
 		//Get the points of our triangle
+		
+		//Draw the bounding box if enabled
+		if(showBoundingBox) {
+			this.boundingBox.draw(g,  p);
+		}
+	}
+
+	@Override
+	public void drawShape(Graphics g, Point p) {
+		//Get the absolute top-left coordinate of the entity
+		int baseX = (int)(p.getX());
+		int baseY = (int)(p.getY());
 		int[] xPoints = {baseX, baseX+size, baseX+(size/2)};
 		int[] yPoints = {baseY, baseY, baseY+size};
 		int nPoints = 3;
 
-		g.drawPolygon(xPoints, yPoints, nPoints);
+		g.drawPolygon(xPoints, yPoints, nPoints);	
+	}
+	
+	public void handleCollision(GameObject otherObject) {
 	}
 }

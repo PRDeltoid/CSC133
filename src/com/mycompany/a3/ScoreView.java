@@ -27,7 +27,6 @@ public class ScoreView extends Container implements Observer {
 		this.setLayout(new FlowLayout(Component.CENTER));
 		
 		//add our starting labels
-		//TODO Add padding so labels don't shift as values change
 		timeLabel  	= new Label("Time: ");
 		timeText = new Label("0000");
 		livesLabel 	= new Label("Lives Left: ");

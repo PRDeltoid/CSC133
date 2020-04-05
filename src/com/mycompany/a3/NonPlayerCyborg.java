@@ -32,8 +32,6 @@ public class NonPlayerCyborg extends Cyborg {
 	}
 	
 	public void switchStrategy(GameWorld world) {
-		//Increase lastBaseReached every time we set a strat
-		lastBaseReached++;
 		Random rand = new Random();
 		switch(rand.nextInt(3)) {
 		case(0):
@@ -46,7 +44,6 @@ public class NonPlayerCyborg extends Cyborg {
 			currentStrategy = new RandomMoveStrategy(this, world);
 			break;
 		}
-		//TODO
 	}
 
 	public String toString() {
@@ -62,16 +59,9 @@ public class NonPlayerCyborg extends Cyborg {
 		" strategy=" + this.currentStrategy.getStrategyName();
 	}
 	
-	public void draw(Graphics g, Point p) {
-		Point drawAt = new Point();
-		//Get the upper-left corner relative to our center
-		drawAt.setX(getLocation().getX() - getSize()/2);
-		drawAt.setY(getLocation().getY() - getSize()/2);
-		
-
-		//Draw our shape
-		g.setColor(getColor());
-		//TODO: Make circle
-		g.drawRect((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size, size, 5);
+	public void drawShape(Graphics g, Point p) {
+		g.drawRect((int)p.getX(), (int)p.getY(), size, size, 5);
 	}
+	
+
 }

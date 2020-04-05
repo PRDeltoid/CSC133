@@ -19,14 +19,7 @@ public class PlayerCyborg extends Cyborg {
 		return player;
 	}
 	
-	public void draw(Graphics g, Point p) {
-		Point drawAt = new Point();
-		drawAt.setX(getLocation().getX() - getSize()/2);
-		drawAt.setY(getLocation().getY() - getSize()/2);
-		
-
-		g.setColor(getColor());
-		//TODO: Make circle
-		g.fillRect((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size, size);
+	public void drawShape(Graphics g, Point p) {
+		g.fillRect((int)p.getX(), (int)p.getY(), size, size);
 	}
 }

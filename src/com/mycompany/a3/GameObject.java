@@ -4,10 +4,12 @@ import com.codename1.charts.models.Point;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.geom.Shape;
 
-abstract public class GameObject extends Object implements IDrawable {
+abstract public class GameObject extends Object implements IDrawable, ICollider{
 	Point location = new Point();
 	int size;
 	int color;
+	BoundingBox boundingBox;
+	boolean showBoundingBox = false;
 	
 	private void setSize(int size) {
 		this.size = size;
@@ -17,6 +19,7 @@ abstract public class GameObject extends Object implements IDrawable {
 		this.setLocation(x,y);
 		this.setSize(size);
 		this.setColor(color);
+		boundingBox = new BoundingBox(this);
 	}
 	
 	public int getSize() {
@@ -49,5 +52,31 @@ abstract public class GameObject extends Object implements IDrawable {
 	abstract void update(int elapsedTime, GameWorld world);
 	
 	abstract String getClassName();
+
+	public void SetShowBoundingBox(boolean show) {
+		showBoundingBox = show;
+	}
+	
+	public void draw(Graphics g, Point p) {
+		Point drawAt = new Point();
+		drawAt.setX(getLocation().getX() - getSize()/2);
+		drawAt.setY(getLocation().getY() - getSize()/2);
+		
+
+		g.setColor(getColor());
+		this.drawShape(g,  new Point((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY())));
+		//Draw the bounding box if enabled
+		if(showBoundingBox) {
+			this.boundingBox.draw(g,  p);
+		}
+	}
+	
+	public boolean collidesWith(GameObject otherObject) {
+		return this.getBoundingBox().checkCollision(otherObject.getBoundingBox());
+	}
+
+	private BoundingBox getBoundingBox() {
+		return this.boundingBox;
+	}
 
 }

@@ -18,7 +18,7 @@ public class GameWorld extends Observable {
 	private int remainingLives = startLives;
 	private boolean sound = false;
 	private Sound cyborgCrashSound;
-	private Sound energystationCollideSound;
+	private Sound energyStationCollideSound;
 	private Sound lifeLostSound;
 	private BGSound backgroundSound;
 	
@@ -104,6 +104,8 @@ public class GameWorld extends Observable {
 		objects.add(PlayerCyborg.getPlayer());
 		//Move player back to "start". Currently hardcoded at 0,0 (with Base 1, seen below)
 		PlayerCyborg.getPlayer().setLocation(100, 100);
+		//Hardcoded show bounding box for player
+		PlayerCyborg.getPlayer().SetShowBoundingBox(true);
 
 		//Add our bases
 		//4 bases, random location, blue color, sequenced in order
@@ -159,7 +161,7 @@ public class GameWorld extends Observable {
 	
 	public void createSounds() {
 		cyborgCrashSound = new Sound("cyborg-collide.mp3", this); //TODO: Change to wav
-		energystationCollideSound = new Sound("energystation-collide.wav", this);
+		energyStationCollideSound = new Sound("energystation-collide.wav", this);
 		lifeLostSound = new Sound("life-loss.wav", this);
 		backgroundSound = new BGSound("bg-sound.wav");
 	}
@@ -178,6 +180,7 @@ public class GameWorld extends Observable {
 			//Passing in 20ms update time hardcoded right now
 			//TODO: Make this dynamic based on timer
 			object.update(20, this);
+			checkCollision(object);
 		}
 
 		//Player death/out of energy check
@@ -221,6 +224,28 @@ public class GameWorld extends Observable {
 		notifyObservers();
 	}
 	
+	private void checkCollision(GameObject object) {
+		IIterator objects = this.objects.getIterator();
+		while(objects.hasNext()) {
+			GameObject otherObject = (GameObject) objects.next();
+
+			//Check all other objects for collision
+			if(object.collidesWith(otherObject)) {
+				if(object instanceof Cyborg) {
+					if(otherObject instanceof Cyborg || otherObject instanceof Drone) { 
+						cyborgCrashSound.play();
+					} else if(otherObject instanceof EnergyStation) {
+						energyStationCollideSound.play();
+					}
+				}
+				object.handleCollision(otherObject);
+				otherObject.handleCollision(object);
+				//TODO: Add to an "already collided" list
+			}
+		}
+		
+	}
+
 	public void toggleSound() {
 		sound = !sound;
 		

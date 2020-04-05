@@ -37,14 +37,17 @@ public class EnergyStation extends FixedGameObject {
 	public String getClassName() {
 		return "EnergyStation";
 	}
-	public void draw(Graphics g, Point p) {
-		Point drawAt = new Point();
-		drawAt.setX(getLocation().getX() - getSize()/2);
-		drawAt.setY(getLocation().getY() - getSize()/2);
-		
-
-		g.setColor(getColor());
-		//TODO: Make circle
-		g.fillArc((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY()), size/2, size/2, 0, 360);
+	
+	public void drawShape(Graphics g, Point p) {
+		g.fillArc((int)p.getX(), (int)p.getY(), size/2, size/2, 0, 360);	
+	}
+	
+	public void handleCollision(GameObject collider) {
+		if(collider instanceof Cyborg) {
+			((EnergyStation) collider).emptyCapacity();
+		} else {
+			//unknown collider, show an error
+			System.out.print("Error: An unknown collision has occurred!");
+		}
 	}
 }

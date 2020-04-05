@@ -193,4 +193,27 @@ abstract public class Cyborg extends MovableGameObject implements ISteerable {
 		return "Cyborg";
 	}
 	
+	public void handleCollision(GameObject collider) {
+		if(collider instanceof Drone) {
+			//Hardcoded 1 damage 
+			this.damageLevel += 1;
+			this.fadeColor();
+		} else if(collider instanceof Cyborg) {
+			this.damageLevel += 1;
+			this.fadeColor();
+		} else if(collider instanceof Base) {
+			//Update the cyborg's last touched base IF THEY ARE IN SEQUENCE (ie. 1 more than previously touched base)
+			this.setLastBase(((Base) collider).getSequenceNumber());
+		} else if(collider instanceof EnergyStation) {
+			//Give the cyborg all of the EnergyStation's energy
+			this.addEnergy(((EnergyStation) collider).getCapacity());
+		} else {
+			//unknown collider, show an error
+			System.out.print("Error: An unknown collision has occurred!");
+		}
+		
+		//recalculate our speed after collision (if we took damage, our speed will decrease)
+		updateSpeed();	
+	}
+	
 }
