@@ -41,7 +41,11 @@ public class Base extends FixedGameObject {
 		int[] yPoints = {baseY, baseY, baseY+size};
 		int nPoints = 3;
 
-		g.fillPolygon(xPoints, yPoints, nPoints);
+		if(isSelected()) {
+			g.drawPolygon(xPoints, yPoints, nPoints);
+		} else {
+			g.fillPolygon(xPoints, yPoints, nPoints);
+		}
 	}
 	public void handleCollision(GameObject collider) {
 	}

@@ -14,7 +14,7 @@ public class Sound {
 	public Sound(String soundfile, GameWorld world) {
 		if (Display.getInstance().getCurrent() == null)
 		{
-			System.out.println("Error: Create sound objects after calling show()!");
+			System.out.println("Error: Only create sounds after calling Display.show()");
 			System.exit(0);
 		}
 		this.world = world;

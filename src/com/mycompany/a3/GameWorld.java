@@ -24,34 +24,6 @@ public class GameWorld extends Observable {
 	
 	private int lastBase = 4; //The last base needed to win the game
 	
-	/*helper function to make sure a given value falls within a range
-	//this is very useful if we need to make sure a given X or Y value is within our map
-	//if the X or Y value is outside of our clamp, we make it the maximum or minimum value (depending on if it is under or over our clamp values respectively)
-	static private float clamp(float value, float max, float min) {
-		//Take the maximum of our largest possible value (the minimum of the value and max) and our minimum value
-		return Math.max(min, Math.min(value, max));
-		
-	}
-	
-	//Checks if a given unit is within a given boundary
-	//Commonly used for bounds checking
-	private boolean isInsideBoundary(GameObject object) {
-		return ((0 <= object.getLocation().getX()) &&
-				(0 <= object.getLocation().getY()) && 
-				(height >= object.getLocation().getX()) && 
-				(width >= object.getLocation().getY()));
-	}
-	
-	//Checks if a given object is outside of the game boundaries
-	private boolean isOutOfBounds(GameObject object) {
-		return !isInsideBoundary(object);
-	}
-
-	//Nudges an object back into the game world
-	private void nudgeInsideBoundary(GameObject object) {
-		object.setLocation(clamp(object.getLocation().getX(),0,height), clamp(object.getLocation().getY(),0,width));
-	}*/
-	
 	public int getHeight() {
 		return height;
 	}
@@ -224,6 +196,7 @@ public class GameWorld extends Observable {
 		notifyObservers();
 	}
 	
+
 	private void checkCollision(GameObject object) {
 		IIterator objects = this.objects.getIterator();
 		while(objects.hasNext()) {
@@ -245,7 +218,6 @@ public class GameWorld extends Observable {
 		}
 		
 	}
-
 	public void toggleSound() {
 		sound = !sound;
 		
@@ -278,5 +250,22 @@ public class GameWorld extends Observable {
 		
 		return null;
 		
+	}
+
+	///Gets the first selected object in the game object collection
+	///Only one object should ever be selected at a time, so this should return the ONLY selected object
+	public ISelectable getSelected() {
+
+		ISelectable selectedObject = null;
+		IIterator it = objects.getIterator();
+		while(it.hasNext()) {
+			GameObject object = (GameObject) it.next();
+			if(object instanceof ISelectable) {
+				if(((ISelectable) object).isSelected()) {
+					selectedObject = (ISelectable) object;
+				}
+			}
+		}
+		return (ISelectable)selectedObject;
 	}
 }

@@ -10,6 +10,7 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.geom.Dimension;
+import com.codename1.charts.models.Point;
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.ui.Button;
 import com.codename1.ui.CheckBox;
@@ -20,6 +21,7 @@ import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.Form;
 import java.lang.String;
+import java.util.Random;
 
 public class Game extends Form implements Runnable {
 	
@@ -59,6 +61,15 @@ public class Game extends Form implements Runnable {
 		world.init(gui.centerContainer.getHeight(), gui.centerContainer.getWidth());
 	}
 	
+
+	public boolean getPaused() {
+		return paused;
+	}
+
+	private void togglePaused() {
+		paused = !paused;
+	}
+
 	public Game() {
 		//Create the world model
 		//TODO Make height/width equal to the MapView object in myGui
@@ -89,6 +100,7 @@ public class Game extends Form implements Runnable {
 		Button accelerateBtn;
 		Button leftBtn;
 		Button changeStratBtn;
+	    Button changePositionBtn;
 		Button togglePlayBtn;
 		
 		private Game getOuter() {
@@ -102,6 +114,7 @@ public class Game extends Form implements Runnable {
 			LeftCommand leftCommand = new LeftCommand();
 			ChangeStratCommand changeStratCommand = new ChangeStratCommand(world);
 			TogglePlayCommand playCommand = new TogglePlayCommand(getOuter());
+			ChangePositionCommand changePositionCommand = new ChangePositionCommand();
 			
 			 brakeBtn = new MyButton("Break");
 			 brakeBtn.setCommand(brakeCommand);
@@ -123,13 +136,23 @@ public class Game extends Form implements Runnable {
 			 changeStratBtn = new MyButton("Change Strat");
 			 changeStratBtn.setCommand(changeStratCommand);
 			 
+			 changePositionBtn = new MyButton("Change Position");
+			 changePositionBtn.setCommand(changePositionCommand);
+			 //Disabled on startup (only available during pause)
+			 changePositionBtn.setEnabled(false);
+			 
 			 togglePlayBtn = new MyButton("Pause");
 			 togglePlayBtn.setCommand(playCommand);
+			 //This logic cannot be inside the button as it must be able to interact with other buttons
 			 togglePlayBtn.addActionListener((e) -> {
 					 if(getOuter().paused) {
 						 togglePlayBtn.setText("Play");
+						 changePositionBtn.setEnabled(true);
+						 changePositionCommand.setEnabled(true);
 					 } else {
 						 togglePlayBtn.setText("Pause");
+						 changePositionBtn.setEnabled(true);
+						 changePositionCommand.setEnabled(false);
 					 }
 			 });
 		}
@@ -173,8 +196,9 @@ public class Game extends Form implements Runnable {
 			southContainer = new Container();
 			southContainer.setLayout(new FlowLayout(Component.CENTER));
 			southContainer.add(togglePlayBtn);
+			southContainer.add(changePositionBtn);
 
-			centerContainer = new MapView(world);
+			centerContainer = new MapView(world, Game.this);
 			
 			Game.this.add(BorderLayout.CENTER, centerContainer);
 			Game.this.add(BorderLayout.NORTH, northContainer);
@@ -257,13 +281,14 @@ public class Game extends Form implements Runnable {
 		
 		Game target;
 		public TogglePlayCommand(Game game) {
-			super("Play");
+			super("Pause");
 			this.target = game;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			target.paused = !(target.paused);
+			target.togglePaused();
+			world.toggleSound();
 		}
 	}
 
@@ -323,8 +348,26 @@ public class Game extends Form implements Runnable {
 			System.out.println("Sound command invoked");
 			world.toggleSound();
 		}
-		
 	}
+
+	private class ChangePositionCommand extends Command {
+		
+		public ChangePositionCommand() {
+			super("ChangePosition");
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Change position command invoked");
+			Random rand = new Random();
+			GameObject object = (GameObject)world.getSelected();
+			if(object != null) {
+				((GameObject)world.getSelected()).setLocation(rand.nextInt(world.getHeight()),rand.nextInt(world.getWidth()));
+				repaint();
+			}
+		}
+	}
+
 	//Button styling
 	private class MyButton extends Button {
 	

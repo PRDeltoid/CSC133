@@ -39,7 +39,11 @@ public class EnergyStation extends FixedGameObject {
 	}
 	
 	public void drawShape(Graphics g, Point p) {
-		g.fillArc((int)p.getX(), (int)p.getY(), size/2, size/2, 0, 360);	
+		if(isSelected()) {
+			g.drawArc((int)p.getX(), (int)p.getY(), size/2, size/2, 0, 360);	
+		} else {
+			g.fillArc((int)p.getX(), (int)p.getY(), size/2, size/2, 0, 360);	
+		}
 	}
 	
 	public void handleCollision(GameObject collider) {

@@ -16,18 +16,39 @@ import com.codename1.ui.plaf.Border;
 public class MapView extends Container implements Observer {
 	
 	GameWorld world;
+	Game game;
 	
+	@Override
+	public void pointerPressed(int x, int y) {
+		//only do this stuff if the game is paused
+		if(game.getPaused()) {
+			x = x - getParent().getAbsoluteX();
+			y = y - getParent().getAbsoluteY();
+			Point pPtrRelPrnt = new Point(x, y);
+			Point pCmpRelPrnt = new Point(getX(), getY());
+			GameObjectCollection objects = world.getObjects();
+			IIterator it = objects.getIterator();
+			while(it.hasNext()) {
+				GameObject object = (GameObject) it.next();
+				if(object instanceof ISelectable) {
+					ISelectable selectedObject = (ISelectable)object;
+					if (selectedObject.contains(pPtrRelPrnt, pCmpRelPrnt)) {
+						selectedObject.setSelected(true);
+					} else {
+						selectedObject.setSelected(false);
+					}
+				}
+			}
+			repaint();
+		}
+	}
 	
-	/*@Override
-	protected Dimension calcPreferredSize() {
-		return new Dimension(Display.getInstance().getDisplayWidth(),Display.getInstance().getDisplayHeight());
-	}*/
-
-	public MapView(Observable gameWorld) {
+	public MapView(Observable gameWorld, Game game) {
 		this.setLayout(new FlowLayout());
 		this.add(new Label("MapView"));
 		
 		world = (GameWorld)gameWorld;
+		this.game = game;
 		
 		//Add our observer to the model
 		gameWorld.addObserver(this);

@@ -65,6 +65,7 @@ abstract public class GameObject extends Object implements IDrawable, ICollider{
 
 		g.setColor(getColor());
 		this.drawShape(g,  new Point((int)(p.getX()+drawAt.getX()), (int)(p.getY()+drawAt.getY())));
+
 		//Draw the bounding box if enabled
 		if(showBoundingBox) {
 			this.boundingBox.draw(g,  p);
